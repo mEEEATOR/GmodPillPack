@@ -487,11 +487,11 @@ if CLIENT then
 
 		local node_home = tree:AddNode("Home","icon16/application.png")
 		
-		makeHTMLnode(node_home,"https://dl.dropboxusercontent.com/u/118688241/ppp/home.html")
+		makeHTMLnode(node_home,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-home.html")
 		
 		local node_help = node_home:AddNode("Help","icon16/help.png")
 		
-		makeHTMLnode(node_help,"https://dl.dropboxusercontent.com/u/118688241/ppp/help.html")
+		makeHTMLnode(node_help,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-help.html")
 		node_help:DoPopulate()
 		help_panel = node_help.SpawnPanel
 		
@@ -520,7 +520,7 @@ if CLIENT then
 		
 		local node_bug = node_home:AddNode("Report a Bug","icon16/exclamation.png")
 		
-		makeHTMLnode(node_bug,"https://dl.dropboxusercontent.com/u/118688241/ppp/bugreport.html")
+		makeHTMLnode(node_bug,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-bugreport.html")
 		node_bug:DoPopulate()
 		node_bug.SpawnPanel:QueueJavascript("setAddons("..util.TableToJSON(engine.GetAddons())..")")
 
