@@ -487,11 +487,11 @@ if CLIENT then
 
 		local node_home = tree:AddNode("Home","icon16/application.png")
 		
-		makeHTMLnode(node_home,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-home.html")
+		makeHTMLnode(node_home,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-home.html")
 		
 		local node_help = node_home:AddNode("Help","icon16/help.png")
 		
-		makeHTMLnode(node_help,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-help.html")
+		makeHTMLnode(node_help,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-help.html")
 		node_help:DoPopulate()
 		help_panel = node_help.SpawnPanel
 		
@@ -520,7 +520,7 @@ if CLIENT then
 		
 		local node_bug = node_home:AddNode("Report a Bug","icon16/exclamation.png")
 		
-		makeHTMLnode(node_bug,"http://birdbrainswagtrain.github.io/GmodPillPack/ingame-bugreport.html")
+		makeHTMLnode(node_bug,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-bugreport.html")
 		node_bug:DoPopulate()
 		node_bug.SpawnPanel:QueueJavascript("setAddons("..util.TableToJSON(engine.GetAddons())..")")
 
