@@ -1,0 +1,13 @@
+{
+	"title"		:	"Parakeet's Pill Pack",
+	"type"		:	"vehicle",
+	"tags"		:	["fun"],
+	"ignore"	:
+	[
+		".git*",
+		"*.gma",
+		"*.md",
+		"*.bat",
+		"LICENSE"
+	]
+}
