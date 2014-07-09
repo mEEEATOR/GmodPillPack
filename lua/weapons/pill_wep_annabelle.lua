@@ -21,7 +21,7 @@ SWEP.Category = "Pill Pack Weapons"
 SWEP.Slot=3
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("crossbow")
+	self:SetHoldType("crossbow")
 end
 
 function SWEP:PrimaryAttack()

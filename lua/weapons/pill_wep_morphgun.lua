@@ -21,7 +21,7 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("pistol")
+	self:SetHoldType("pistol")
 	self.nextreload=0
 end
 

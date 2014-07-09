@@ -21,7 +21,7 @@ SWEP.AdminSpawnable=true*/
 SWEP.PrintName="Holstered"
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("normal")
+	self:SetHoldType("normal")
 end
 
 function SWEP:PrimaryAttack()

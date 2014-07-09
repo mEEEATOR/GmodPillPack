@@ -1129,6 +1129,16 @@ else //CLIENT HOOKS
 			end
 			return oldCalcView(self, ply, pos, angles, fov)
 		end
+
+		local oldCalcViewModelView = GAMEMODE.CalcViewModelView
+		function GAMEMODE:CalcViewModelView(wep,vm,oldPos,oldAng,pos,ang)
+			local ent = getMappedEnt(LocalPlayer())
+			local ply = wep.Owner
+			if (IsValid(ent) and ply:GetViewEntity()==ply and var_thirdperson:GetBool()) then
+				return oldPos+oldAng:Forward()*-500,ang
+			end
+			return pos,ang
+		end
 	end)
 
 	/*

@@ -25,7 +25,7 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("ar2")
+	self:SetHoldType("ar2")
 end
 
 function SWEP:PrimaryAttack()

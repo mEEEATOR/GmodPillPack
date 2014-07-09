@@ -25,7 +25,7 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("pistol")
+	self:SetHoldType("pistol")
 	self:SetMode(0)
 end
 
@@ -89,15 +89,15 @@ function SWEP:SecondaryAttack()
 
 	if self:GetMode()==0 then
 		self.Owner:ChatPrint("Pistol Mode")
-		self:SetWeaponHoldType("pistol")
+		self:SetHoldType("pistol")
 		self:PillAnim("weapon_pistol")
 	elseif self:GetMode()==1 then
 		self.Owner:ChatPrint("SMG Mode")
-		self:SetWeaponHoldType("smg")
+		self:SetHoldType("smg")
 		self:PillAnim("weapon_smg")
 	elseif self:GetMode()==2 then
 		self.Owner:ChatPrint("Rifle Mode")
-		self:SetWeaponHoldType("ar2")
+		self:SetHoldType("ar2")
 		self:PillAnim("weapon_rifle")
 	end
 	self.Owner:EmitSound("weapons/smg1/switch_single.wav")
