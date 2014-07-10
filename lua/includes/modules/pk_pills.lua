@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 //Module starts here...
 module("pk_pills",package.seeall)
-version="1.1.4"
+version="1.1.5"
 
 //
 //Load files
@@ -1129,15 +1129,13 @@ else //CLIENT HOOKS
 			end
 			return oldCalcView(self, ply, pos, angles, fov)
 		end
+	end)
 
-		local oldCalcViewModelView = GAMEMODE.CalcViewModelView
-		function GAMEMODE:CalcViewModelView(wep,vm,oldPos,oldAng,pos,ang)
-			local ent = getMappedEnt(LocalPlayer())
-			local ply = wep.Owner
-			if (IsValid(ent) and ply:GetViewEntity()==ply and var_thirdperson:GetBool()) then
-				return oldPos+oldAng:Forward()*-500,ang
-			end
-			return pos,ang
+	hook.Add("CalcViewModelView", "pk_pill_move_vms", function(wep,vm,oldPos,oldAng,pos,ang)
+		local ent = getMappedEnt(LocalPlayer())
+		local ply = wep.Owner
+		if (IsValid(ent) and ply:GetViewEntity()==ply and var_thirdperson:GetBool()) then
+			return oldPos+oldAng:Forward()*-500,ang
 		end
 	end)
 
