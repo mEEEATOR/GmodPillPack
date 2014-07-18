@@ -79,7 +79,6 @@ pk_pills.register("headcrab",{
 					ent:PillSound("bite")
 				end
 				if crabbed:Health()<=ent.formTable.biteDmg and not crabbed:IsFlagSet(FL_GODMODE) then
-					local crabbed= trace.Entity
 					
 					local crabbed_actual
 					if pk_pills.getMappedEnt(crabbed) then

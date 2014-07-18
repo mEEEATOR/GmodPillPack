@@ -1,12 +1,5 @@
 AddCSLuaFile()
 
-if CLIENT then
-	game.AddParticles("particles/Vortigaunt_FX.pcf")
-
-	PrecacheParticleSystem("vortigaunt_beam")
-	PrecacheParticleSystem("vortigaunt_beam_b")
-end
-
 pk_pills.register("vort",{
 	printName="Vortigaunt",
 	type="ply",
