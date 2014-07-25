@@ -24,6 +24,9 @@ function ENT:Initialize()
 	ply:SetHullDuck(-Vector(hull.x/2,hull.y/2,0),Vector(hull.x/2,hull.y/2,hull.z-duckBy||0))
 	
 	ply:SetRenderMode(RENDERMODE_NONE)
+
+	//Do this so weapon equips are not blocked
+	pk_pills.mapEnt(ply,nil)
 	
 	if SERVER then
 		self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
@@ -248,7 +251,7 @@ function ENT:Initialize()
 		//print(self.dbl:LookupBone("ValveBiped.Bip01_Head1"))
 	end
 
-	pk_pills.mapEnt(self:GetPillUser(),self)
+	pk_pills.mapEnt(ply,self)
 
 	//self:SetPlaybackRate(1)
 end
@@ -298,6 +301,7 @@ function ENT:OnRemove()
 				local vel = ply:GetVelocity()
 				ply:StripWeapons()
 				ply:StripAmmo()
+				
 				ply:Spawn()
 				ply:SetEyeAngles(angs)
 				ply:SetPos(pos)
