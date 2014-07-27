@@ -385,7 +385,7 @@ function ENT:Think()
 			anim=anims["swim"]||anims["glide"]||anims["idle"]
 		elseif ply:IsOnGround() then
 			if ply:Crouching() then
-				if vel> ply:GetCrouchedWalkSpeed()/2 then
+				if vel> ply:GetCrouchedWalkSpeed()/4 then
 					anim=anims["crouch_walk"]||anims["crouch"]||anims["walk"]||anims["idle"]
 				else
 					anim=anims["crouch"]||anims["idle"]
@@ -393,7 +393,7 @@ function ENT:Think()
 			else
 				if vel> (ply:GetWalkSpeed()+ply:GetRunSpeed())/2 then
 					anim=anims["run"]||anims["walk"]||anims["idle"]
-				elseif vel> ply:GetWalkSpeed()/2 then
+				elseif vel> ply:GetWalkSpeed()/4 then
 					anim=anims["walk"]||anims["idle"]
 				else
 					anim=anims["idle"]
