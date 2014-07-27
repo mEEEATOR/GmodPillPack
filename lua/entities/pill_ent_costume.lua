@@ -234,7 +234,7 @@ function ENT:Initialize()
 			if gmp and gmp.Enabled:GetBool() then
 				ply.pk_pill_gmpEnabled = true
 				
-				RunConsoleCommand("gmp_enabled","0")
+				//RunConsoleCommand("gmp_enabled","0")
 			end
 			
 			//Compatibility with Gmod Legs
@@ -317,7 +317,7 @@ function ENT:OnRemove()
 				if ply.pk_pill_gmpEnabled then
 					ply.pk_pill_gmpEnabled = nil
 					
-					RunConsoleCommand("gmp_enabled","1")
+					//RunConsoleCommand("gmp_enabled","1")
 				end
 				
 				ply.ShouldDisableLegs=nil

@@ -1078,67 +1078,6 @@ else //CLIENT HOOKS
 		end
 	end)
 
-	hook.Add("Initialize","pk_pill_cam_setup",function()
-		local oldCalcView = GAMEMODE.CalcView
-
-		function GAMEMODE:CalcView(ply, pos, angles, fov)
-			//print(ply:GetViewEntity())
-
-		//hook.Add("CalcView","pk_pill_cam",function(ply, pos, angles, fov)
-			local ent = getMappedEnt(LocalPlayer())
-			if (IsValid(ent) and ply:GetViewEntity()==ply) then
-				//print("v")
-				local startpos
-				if ent.formTable.type=="phys" then
-					startpos = ent:LocalToWorld(ent.formTable.camera&&ent.formTable.camera.offset||Vector(0,0,0))
-				else
-					startpos=pos
-				end
-
-				if var_thirdperson:GetBool() then
-					local dist
-					if ent.formTable.type=="phys"&&ent.formTable.camera&&ent.formTable.camera.distFromSize then
-						dist = ent:BoundingRadius()*5
-					else
-						dist = ent.formTable.camera&&ent.formTable.camera.dist||100
-					end
-
-					local offset = LocalToWorld(Vector(-dist,0,dist/5),Angle(0,0,0),Vector(0,0,0),angles)
-					local tr = util.TraceHull({
-						start=startpos,
-						endpos=startpos+offset,
-						filter=ent.camTraceFilter,
-						mins=Vector(-5,-5,-5),
-						maxs=Vector(5,5,5),
-						mask=MASK_VISIBLE
-					})
-					//PrintTable(ent.camTraceFilter)
-					local view = {}
-					view.origin = tr.HitPos
-					view.angles = angles//(ent.GoodEyeTrace&&(pillEnt:GoodEyeTrace().HitPos-tr.HitPos):Angle())||angles
-					view.fov = fov
-					view.vm_origin = view.origin+view.angles:Forward()*-500
-					return view
-				else
-					local view = {}
-					view.origin = startpos
-					view.angles = angles
-					view.fov = fov
-					return view
-				end
-			end
-			return oldCalcView(self, ply, pos, angles, fov)
-		end
-	end)
-
-	hook.Add("CalcViewModelView", "pk_pill_move_vms", function(wep,vm,oldPos,oldAng,pos,ang)
-		local ent = getMappedEnt(LocalPlayer())
-		local ply = wep.Owner
-		if (IsValid(ent) and ply:GetViewEntity()==ply and var_thirdperson:GetBool()) then
-			return oldPos+oldAng:Forward()*-500,ang
-		end
-	end)
-
 	/*
 	Just use the default HUD from now on
 	hook.Add("HUDShouldDraw", "pk_pill_hideHud", function(name)
