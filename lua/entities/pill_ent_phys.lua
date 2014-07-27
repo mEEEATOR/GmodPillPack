@@ -205,7 +205,7 @@ function ENT:Initialize()
 			end
 			
 			//Compatibility with Gmod Legs
-			ply.ShouldDisableLegs=true
+			//ply.ShouldDisableLegs=true
 			
 			self.camTraceFilter= {self}
 
@@ -255,7 +255,7 @@ function ENT:OnRemove()
 					//RunConsoleCommand("gmp_enabled","1")
 				end
 				
-				ply.ShouldDisableLegs=nil
+				//ply.ShouldDisableLegs=nil
 
 				pk_pills.help_panel:RunJavascript("setPill(null)")
 			end

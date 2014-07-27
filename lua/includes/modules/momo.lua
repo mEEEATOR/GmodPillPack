@@ -27,7 +27,7 @@ end
 
 function momo_hooks.CalcView(ply,pos,ang,fov,nearZ,farZ)
 	local ent = pk_pills.getMappedEnt(LocalPlayer())
-	if (IsValid(ent)) then // and ply:GetViewEntity()==ply) then
+	if (IsValid(ent) and ply:GetViewEntity()==ent) then
 		local startpos
 		if ent.formTable.type=="phys" then
 			startpos = ent:LocalToWorld(ent.formTable.camera&&ent.formTable.camera.offset||Vector(0,0,0))
@@ -71,7 +71,7 @@ end
 function momo_hooks.CalcViewModelView(wep,vm,oldPos,oldAng,pos,ang)
 	local ent = pk_pills.getMappedEnt(LocalPlayer())
 	local ply = wep.Owner
-	if (IsValid(ent) and ply:GetViewEntity()==ply and pk_pills.var_thirdperson:GetBool()) then
+	if (IsValid(ent) and ply:GetViewEntity()==ent and pk_pills.var_thirdperson:GetBool()) then
 		return oldPos+oldAng:Forward()*-500,ang
 	end
 end
@@ -98,5 +98,39 @@ for _,f in pairs(blocked_functions) do
 		if !IsValid(ent) then
 			old_func(self,...)
 		end
+	end
+end
+
+//Make GetViewEntity return the pill entity
+
+local old_getviewentity = meta_player.GetViewEntity
+local old_setviewentity = meta_player.SetViewEntity
+
+function meta_player:GetViewEntity()
+	local ent = old_getviewentity(self)
+	local formEnt = pk_pills.getMappedEnt(self)
+
+	if ent==self and IsValid(formEnt) then
+		return formEnt
+	end
+	return ent
+end
+
+function meta_player:SetViewEntity(ent)
+	if ent:GetClass()=="pill_ent_phys" or ent:GetClass()=="pill_ent_costume" then ent=self end
+	old_setviewentity(self,ent)
+end
+
+if CLIENT then
+	local old_g_getviewentity = _G.GetViewEntity
+
+	_G.GetViewEntity = function()
+		local ent = old_g_getviewentity()
+		local formEnt = pk_pills.getMappedEnt(LocalPlayer())
+
+		if ent==LocalPlayer() and IsValid(formEnt) then
+			return formEnt
+		end
+		return ent
 	end
 end
