@@ -522,7 +522,7 @@ if CLIENT then
 		
 		makeHTMLnode(node_bug,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-bugreport.html")
 		node_bug:DoPopulate()
-		node_bug.SpawnPanel:QueueJavascript("setAddons("..util.TableToJSON(engine.GetAddons())..")")
+		node_bug.SpawnPanel:QueueJavascript("setup("..util.TableToJSON{addons=engine.GetAddons(),dedi=game.IsDedicated(),sp=game.SinglePlayer(),gm=GAMEMODE.Name,map=game.GetMap()}..")")
 
 		local node_morphs = tree:AddNode("Categories","icon16/folder.png")
 
