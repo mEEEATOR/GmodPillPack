@@ -1,30 +1,103 @@
 AddCSLuaFile()
 require("momo")
 
-local pill = {
+momo.registerComponent{
+	name="spawnable",
+	info="Makes the form accessable through the spawnmenu.",
+	exflag="spawnable",
+	schema={
+		name={
+			type="string",
+			info="Name shown in spawnmenu."
+		},
+		category={
+			type="string",
+			info="The spawnmenu category to find this form in."
+		},
+		random_skin={
+			type="boolean",
+			info="If true, sub-types of this form will be selected at random.",
+			optional=true
+		}
+	}
+}
+
+momo.registerComponent{
+	name="subtype",
+	info="Makes this form act as a subtype of another form.",
+	exflag="spawnable",
+	schema={
+		of={
+			type="string",
+			info="The form we are a skin of."
+		}
+	}
+}
+
+momo.registerComponent{
+	name="core-physical",
+	info="This is the physical morph core component.",
+	exflag="core",
+	schema={
+		collision_shape={
+			type="string",
+			info="The shape this form will use for collisions.",
+			options={"model","sphere","box","custom_mesh"}
+		},
+		collision_radius={
+			type="number",
+			info="Radius of the collision sphere.",
+			visible=function(compTable)
+				if compTable.collision_shape=="sphere" then return true end
+			end,
+			min=1,
+			max=1000
+		},
+		collision_dimensions={
+			type="Vector",
+			info="Dimensions of the collision box.",
+			visible=function(compTable)
+				if compTable.collision_shape=="box" then return true end
+			end,
+			mincomp=2,
+			maxcomp=2000
+		},
+		collision_offset={
+			type="Vector",
+			info="Offset of the collision box.",
+			optional=true,
+			visible=function(compTable)
+				if compTable.collision_shape=="box" then return true end
+			end,
+			mincomp=-1000,
+			maxcomp=1000
+		},
+		material={
+			type="string",
+			info="The physical material of the form.",
+			optional=true
+		},
+		mass={
+			type="number",
+			info="The mass of the form.",
+			optional=true,
+			min=1,
+			max=10000
+		}
+	}
+}
+
+momo.registerForm{
 	id="sample",
-	parent="", //The parent. Parsed before validation.
-	abstract=true, //Can not create instance of form, spawnable component will be ignored.
 	{
 		"spawnable", 
 		name="I am a sample!",
-		category="momo",
-		skin_of=nil, //Makes the form act as a skin of another pill.
-		random_skin= nil, //If true, spawn with a random skin.
+		category="momo"
 	},
 	{
-		"core-physical", //Validation fails if no collision setting is found or if multiple are found
-		collision_box = nil, //Makes the form use an AABB for collisions.
-		collision_box_offset = nil, //Optional offset for collision box. Validation fails if not using collision box.
-		collision_radius = nil, //Radius of collision sphere.
-		collision_use_model = nil, //Use model for collisions. If no model component found, fail validation.
-		collision_custom_mesh = nil, //Use a custom mesh for collisions. Not sure how.
-		material = "flesh", //Optionally override physical material.
-		mass = 20 //Optionally override mass.
-	},
-	{
-		"view", //If no view component, use default origin/dist.
-		origin = nil,
-		distance = nil
+		"core-physical",
+		collision_shape = "model",
+		material = "flesh",
+		mass = 20
 	}
 }
