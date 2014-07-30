@@ -1,5 +1,5 @@
-AddCSLuaFile()
 require("momo")
+AddCSLuaFile()
 
 momo.registerComponent{
 	name="spawnable",

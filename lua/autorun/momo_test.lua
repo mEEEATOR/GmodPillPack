@@ -1,2 +1,0 @@
-require("momo")
-AddCSLuaFile()

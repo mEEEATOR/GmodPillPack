@@ -1,136 +1,115 @@
 AddCSLuaFile()
 module("momo",package.seeall)
-_VERSION="0"
+_VERSION=0
 
-  ////////////////////////////////////////////////
- // MOMO COMPATIBILITY PART 1: HOOK OVERRIDES! //
-////////////////////////////////////////////////
+//Convars
+CreateConVar("momo_version",_VERSION,{FCVAR_NOTIFY,FCVAR_NOT_CONNECTED},"MoMo version number.")
 
-//Forces our code to run before other hooks, since many coders don't use some hooks (CalcView) correctly.
-//Should work with the GM+ hook "fix"
-//Fuck GM+
+include("momo/compat.lua")
 
-local momo_hooks={}
-local old_hook_call=hook.Call
-
-function hook.Call(name,gm,...)
-	local a,b,c,d,e,f
-	if momo_hooks[name] then
-		a,b,c,d,e,f = momo_hooks[name](...)
-		if a!=nil then
-			return a,b,c,d,e,f
-		end
-	end
-	a,b,c,d,e,f = old_hook_call(name,gm,...)
-	return a,b,c,d,e,f
+local components={}
+function registerComponent(compTable)
+	if !compTable.name or type(compTable.name)!="string" then error("Attempted to register MoMo component with missing/invalid name!") end
+	if !compTable.info or type(compTable.info)!="string" then error("Attempted to register MoMo component with missing/invalid info!") end
+	if !compTable.schema or type(compTable.schema)!="table" then error("Attempted to register MoMo component with missing/invalid schema!") end
+	components[compTable.name]=compTable
 end
 
-function momo_hooks.CalcView(ply,pos,ang,fov,nearZ,farZ)
-	local ent = pk_pills.getMappedEnt(LocalPlayer())
-	if (IsValid(ent) and ply:GetViewEntity()==ent) then
-		local startpos
-		if ent.formTable.type=="phys" then
-			startpos = ent:LocalToWorld(ent.formTable.camera&&ent.formTable.camera.offset||Vector(0,0,0))
-		else
-			startpos=pos
-		end
+/*Prevalidation:
+	confirm id is set
+	confirm parent is set to a valid type
+	set abstract if not set
+*/
 
-		if pk_pills.var_thirdperson:GetBool() then
-			local dist
-			if ent.formTable.type=="phys"&&ent.formTable.camera&&ent.formTable.camera.distFromSize then
-				dist = ent:BoundingRadius()*5
-			else
-				dist = ent.formTable.camera&&ent.formTable.camera.dist||100
+local function validateForm(formTable)
+	local extable = {}
+	for k,v in pairs(formTable) do
+		if type(k)=="number" then
+			local compTable = v
+			local compName = compTable[1]
+			if !compName or type(compName)!="string" then return "Component #"..k.." has a missing/invalid type!" end
+			if !components[compName] then return 'Attempted to use nonexistent component type "'..compName..'"!' end
+			
+			local defTable = components[compName]
+
+			if defTable.exflag then
+				if extable[defTable.exflag] then
+					return 'Components "'..compName..'" and "'..extable[defTable.exflag]..'" cannot be used together!'
+				else
+					extable[defTable.exflag]=compName
+				end
 			end
 
-			local offset = LocalToWorld(Vector(-dist,0,dist/5),Angle(0,0,0),Vector(0,0,0),ang)
-			local tr = util.TraceHull({
-				start=startpos,
-				endpos=startpos+offset,
-				filter=ent.camTraceFilter,
-				mins=Vector(-5,-5,-5),
-				maxs=Vector(5,5,5),
-				mask=MASK_VISIBLE
-			})
-			//PrintTable(ent.camTraceFilter)
-			local view = {}
-			view.origin = tr.HitPos
-			view.angles = ang//(ent.GoodEyeTrace&&(pillEnt:GoodEyeTrace().HitPos-tr.HitPos):Angle())||angles
-			view.fov = fov
-			return view
-		else
-			local view = {}
-			view.origin = startpos
-			view.angles = ang
-			view.fov = fov
-			return view
+			for k,propDef in pairs(defTable.schema) do
+				local compError
+				local optional = propDef.optional or (propDef.visible and not propDef.visible(compTable))
+
+				local propValue = compTable[k]
+				if propValue then
+					if propDef.type and propDef.type!=type(propValue) then
+						compError="must be a "..propDef.type
+					elseif propDef.options and !table.HasValue(propDef.options,propValue) then
+						compError="is not set to a valid option"
+					elseif propDef.min and propValue<propDef.min then
+						compError="is less than the minimum of "..propDef.min
+					elseif propDef.max and propValue>propDef.max then
+						compError="is greater than the maximum of "..propDef.max
+					elseif propDef.mincomp and (propValue.x<propDef.mincomp or propValue.y<propDef.mincomp or propValue.z<propDef.mincomp) then
+						compError="has a component value less than the minimum of "..propDef.mincomp
+					elseif propDef.maxcomp and (propValue.x>propDef.maxcomp or propValue.y>propDef.maxcomp or propValue.z>propDef.maxcomp) then
+						compError="has a component value greater than the maximum of "..propDef.maxcomp
+					end
+				elseif !optional then
+					compError="must be set"
+				end
+
+				if compError then
+					return 'Problem with component "'..compName..'": Property "'..k..'" '..compError..'!'
+				end
+			end
+
+			//check agaist schema!
 		end
 	end
 end
 
-function momo_hooks.CalcViewModelView(wep,vm,oldPos,oldAng,pos,ang)
-	local ent = pk_pills.getMappedEnt(LocalPlayer())
-	local ply = wep.Owner
-	if (IsValid(ent) and ply:GetViewEntity()==ent and pk_pills.var_thirdperson:GetBool()) then
-		return oldPos+oldAng:Forward()*-500,ang
+
+
+/*
+local function validate_numeric(schema_table,obj)
+	if obj._min then
+		if f<obj._min then return false end
+	end
+
+	if obj._max then
+		if f<obj._max then return false end
 	end
 end
 
-  /////////////////////////////////////////////////
- // MOMO COMPATIBILITY PART 2: METATABLE HACKS! //
-/////////////////////////////////////////////////
+local schema_types = {}
 
-//Disable a ton of functions when morphed
-
-local blocked_functions = {
-	"SetHull","SetHullDuck",
-	"SetWalkSpeed","SetRunSpeed","SetCrouchedWalkSpeed",
-	"SetJumpPower","SetStepSize",
-	"SetViewOffset","SetViewOffsetDucked"
+schema_types["int"]={
+	validate=function(schema_table,obj)
+		local i,f = math.modf(obj)
+		if f!=0 then return false end
+		
+		return validate_numeric(schema_table,obj)
+	end
 }
+*/
 
-local meta_player = FindMetaTable("Player")
-
-for _,f in pairs(blocked_functions) do
-	local old_func = meta_player[f]
-	meta_player[f]= function(self,...)
-		local ent = pk_pills.getMappedEnt(self)
-		if !IsValid(ent) then
-			old_func(self,...)
-		end
-	end
-end
-
-//Make GetViewEntity return the pill entity
-
-local old_getviewentity = meta_player.GetViewEntity
-local old_setviewentity = meta_player.SetViewEntity
-
-function meta_player:GetViewEntity()
-	local ent = old_getviewentity(self)
-	local formEnt = pk_pills.getMappedEnt(self)
-
-	if ent==self and IsValid(formEnt) then
-		return formEnt
-	end
-	return ent
-end
-
-function meta_player:SetViewEntity(ent)
-	if ent:GetClass()=="pill_ent_phys" or ent:GetClass()=="pill_ent_costume" then ent=self end
-	old_setviewentity(self,ent)
-end
-
-if CLIENT then
-	local old_g_getviewentity = _G.GetViewEntity
-
-	_G.GetViewEntity = function()
-		local ent = old_g_getviewentity()
-		local formEnt = pk_pills.getMappedEnt(LocalPlayer())
-
-		if ent==LocalPlayer() and IsValid(formEnt) then
-			return formEnt
-		end
-		return ent
+function registerForm(formTable)
+	if CLIENT then return end
+	//Force abstract to false if not true
+	//Set metatable from parent
+	//Do schema validation
+	//Do custom validation?
+	//Call register hooks
+	//Register!
+	local validate_error = validateForm(formTable)
+	if validate_error then
+		print("Validation failed! "..validate_error)
+	else
+		print("Validation successful!")
 	end
 end
