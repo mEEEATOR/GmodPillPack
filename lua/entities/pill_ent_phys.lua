@@ -81,7 +81,7 @@ function ENT:Initialize()
 		end
 
 		if self.formTable.spawnFrozen then
-			self:SetMoveType(MOVETYPE_NONE)
+			self:GetPhysicsObject():EnableMotion(false)
 		end
 
 		ply:DeleteOnRemove(self)
@@ -318,8 +318,8 @@ else
 		if self.formTable.boneMorphs then
 			for k,v in pairs(self.formTable.boneMorphs) do
 				local b = self:LookupBone(k)
-				if b and isfunction(v) then
-					v=v(ply,self)
+				if b then
+					if isfunction(v) then v = v(ply,self) end
 					if !istable(v) then continue end
 					if v.pos then
 						self:ManipulateBonePosition(b,v.pos)

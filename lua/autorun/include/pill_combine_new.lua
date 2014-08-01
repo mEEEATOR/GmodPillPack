@@ -11,8 +11,9 @@ pk_pills.register("ccamera",{
 	},
 	spawnFrozen=true,
 	camera={
-		offset=Vector(0,0,-80),
-		dist=60
+		offset=Vector(0,0,-50),
+		dist=100,
+		underslung=true
 	},
 	aim={
 		xPose="aim_yaw",

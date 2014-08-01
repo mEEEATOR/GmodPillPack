@@ -108,8 +108,8 @@ function registerForm(formTable)
 	//Register!
 	local validate_error = validateForm(formTable)
 	if validate_error then
-		print("Validation failed! "..validate_error)
+		--print("Validation failed! "..validate_error)
 	else
-		print("Validation successful!")
+		--print("Validation successful!")
 	end
 end

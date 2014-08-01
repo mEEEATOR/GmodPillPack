@@ -41,7 +41,9 @@ function momo_hooks.CalcView(ply,pos,ang,fov,nearZ,farZ)
 				dist = ent.formTable.camera&&ent.formTable.camera.dist||100
 			end
 
-			local offset = LocalToWorld(Vector(-dist,0,dist/5),Angle(0,0,0),Vector(0,0,0),ang)
+			local underslung = ent.formTable.camera&&ent.formTable.camera.underslung
+
+			local offset = LocalToWorld(Vector(-dist,0,underslung and -dist/5 or dist/5),Angle(0,0,0),Vector(0,0,0),ang)
 			local tr = util.TraceHull({
 				start=startpos,
 				endpos=startpos+offset,
