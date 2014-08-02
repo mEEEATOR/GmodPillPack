@@ -49,13 +49,36 @@ pk_pills.register("hunter_chopper",{
 		end,
 		delay=.5
 	},
+	reload=function(ply,ent)
+		if ent.lastrocket and ent.lastrocket+1>CurTime() then return end
+		ent:PillSound("rocket")
+		
+		local rocket = ents.Create("rpg_missile")
+		rocket:SetPos(ent:LocalToWorld(Vector(0,80,-80)))
+		rocket:SetAngles(ply:EyeAngles())
+		rocket:SetSaveValue( "m_flDamage", 200 )
+		rocket:SetOwner(ply)
+		rocket:SetVelocity(ent:GetVelocity())
+		rocket:Spawn()
+
+		rocket = ents.Create("rpg_missile")
+		rocket:SetPos(ent:LocalToWorld(Vector(0,-80,-80)))
+		rocket:SetAngles(ply:EyeAngles())
+		rocket:SetSaveValue( "m_flDamage", 200 )
+		rocket:SetOwner(ply)
+		rocket:SetVelocity(ent:GetVelocity())
+		rocket:Spawn()
+
+		ent.lastrocket=CurTime()
+	end,
 	health=5600,
 	damageFromWater=-1,
 	sounds={
 		loop_move="npc/attack_helicopter/aheli_rotor_loop1.wav",
 		loop_attack="npc/attack_helicopter/aheli_weapon_fire_loop3.wav",
 		dropBomb="npc/attack_helicopter/aheli_mine_drop1.wav",
-		die = pk_pills.helpers.makeList("ambient/explosions/explode_#.wav",9)
+		die = pk_pills.helpers.makeList("ambient/explosions/explode_#.wav",9),
+		rocket="weapons/grenade_launcher1.wav"
 	}
 })
 
