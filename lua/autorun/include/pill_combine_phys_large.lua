@@ -89,6 +89,41 @@ pk_pills.register("gunship",{
 		spread=.02,
 		tracer="HelicopterTracer"
 	},
+	attack2={
+		mode="trigger",
+		func=function(ply,ent)
+			if ent.usingWarpCannon then return end
+
+			local fireAngs = ent:GetAngles()
+			fireAngs.p=45
+			fireAngs.r=0
+
+			local tr = util.QuickTrace(ent:GetPos(),ent:GetPos()+fireAngs:Forward()*99999,ent)
+
+			local effectdata = EffectData()
+			effectdata:SetEntity(ent)
+			effectdata:SetOrigin(tr.HitPos)
+			util.Effect("warp_cannon",effectdata,true,true)
+			ent:PillSound("warp_charge") //belly_cannon
+			timer.Simple(1.2,function()
+				if !IsValid(ent) then return end
+				ent:PillSound("warp_fire")
+				util.BlastDamage(ent,ply,tr.HitPos,200,1000)
+				if IsValid(tr.Entity) then
+					local phys = tr.Entity:GetPhysicsObject()
+					if IsValid(phys) then
+						phys:ApplyForceCenter(ply:EyeAngles():Forward()*9^7)
+					end
+				end
+			end)
+
+			ent.usingWarpCannon=true
+			timer.Simple(2.4,function()
+				if !IsValid(ent) then return end
+				ent.usingWarpCannon=nil
+			end)
+		end
+	},
 	pose={
 		fin_accel=function(ply,ent,old)
 			local vel = WorldToLocal(ent:GetVelocity(),Angle(),Vector(0,0,0),ent:GetAngles())
@@ -113,7 +148,9 @@ pk_pills.register("gunship",{
 	sounds={
 		loop_move="npc/combine_gunship/engine_whine_loop1.wav",
 		loop_attack="npc/combine_gunship/gunship_weapon_fire_loop6.wav",
-		die = pk_pills.helpers.makeList("ambient/explosions/explode_#.wav",9)
+		die = pk_pills.helpers.makeList("ambient/explosions/explode_#.wav",9),
+		warp_charge="npc/strider/charging.wav",
+		warp_fire="npc/strider/fire.wav"
 	}
 })
 
@@ -365,7 +402,7 @@ pk_pills.register("strider",{
 			timer.Simple(1.2,function()
 				if !IsValid(ent) then return end
 				ent:PillSound("warp_fire")
-				util.BlastDamage(ent,ply,tr.HitPos,100,1000)
+				util.BlastDamage(ent,ply,tr.HitPos,200,1000)
 				if IsValid(tr.Entity) then
 					local phys = tr.Entity:GetPhysicsObject()
 					if IsValid(phys) then

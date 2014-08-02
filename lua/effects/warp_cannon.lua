@@ -14,8 +14,7 @@ end
 
 function EFFECT:Think()
 	if !IsValid(self.ent) then return false end
-
-	self:SetPos(self.ent:GetAttachment(self.ent:LookupAttachment("BigGun")).Pos)
+	self:SetPos(self.ent:GetAttachment(self.ent:GetModel()=="models/combine_strider.mdl" and self.ent:LookupAttachment("BigGun") or self.ent:LookupAttachment("bellygun")).Pos)
 	self:SetRenderBoundsWS(self:GetPos(),self.hitPos)
 
 	if CurTime()-self.startTime>2.4 then
