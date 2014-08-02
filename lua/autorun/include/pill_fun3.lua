@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 pk_pills.register("me_parakeet",{
 	parent="bird_pigeon",
-	me="STEAM_0:1:18839805",
+	printName="Parakeet",
 	visColorRandom=true,
 	reload = function(ply,ent)
 		local egg = ents.Create("prop_physics")

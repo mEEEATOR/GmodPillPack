@@ -37,10 +37,9 @@ pk_pills.packStart("Fun Pills","fun","icon16/rainbow.png")
 
 include("include/pill_fun.lua")
 include("include/pill_fun2.lua")
+include("include/pill_fun3.lua")
 
 pk_pills.packFinalize()
-
-include("include/pill_me.lua")
 
 pk_pills.addFiles{
 	"models/birdbrainswagtrain/zombie/classic_frame.mdl",

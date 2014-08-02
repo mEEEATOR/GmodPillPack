@@ -115,15 +115,10 @@ end
 //
 
 local forms={}
-local me_map={}
 
 function register(name,t)
 	if t.printName then
 		table.insert(currentPack.items,{type="pill",name=name,printName=t.printName})
-	end
-
-	if t.me then
-		me_map[t.me]=name
 	end
 
 	if (t.sounds) then
@@ -642,15 +637,7 @@ if SERVER then
 		local overridePos
 		local overrideAng
 		
-		if name=="me" then
-			 local pillname = me_map[ply:SteamID()]
-			 if !pillname then
-			 	ply:ChatPrint("Nope.")
-			 	return
-			 end
-			 name=pillname
-			 t =forms[name]
-		elseif mode=="user" then --restriction logic
+		if mode=="user" then --restriction logic
 			local success=true
 			
 			if !t.printName then
