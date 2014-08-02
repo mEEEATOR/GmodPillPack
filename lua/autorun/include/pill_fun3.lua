@@ -109,6 +109,7 @@ local dragon_attacks = {
 
 		ball:SetSaveValue('m_flRadius',12)
 		ball:SetSaveValue("m_nState",3)
+		ball:SetSaveValue("m_nMaxBounces",10)
 
 		ball:GetPhysicsObject():SetVelocity(ply:EyeAngles():Forward()*3000)
 	end
