@@ -117,9 +117,9 @@ local dragon_attacks = {
 
 pk_pills.register("dagent",{
 	printName="Dragon Agent",
-	side="harmless",
+	side="wild",
 	type="ply",
-	default_rp_cost=800,
+	default_rp_cost=20000,
 	visColorRandom=true,
 	model="models/player/combine_super_soldier.mdl",
 	aim={
@@ -157,4 +157,62 @@ pk_pills.register("dagent",{
 	jumpPower=800,
 	movePoseMode="xy",
 	health=10000
+})
+
+pk_pills.register("dingus",{
+	printName="Dingus",
+	side="harmless",
+	type="ply",
+	default_rp_cost=1000,
+	visColorRandom=true,
+	model="models/player/soldier_stripped.mdl",
+	visMat="models/debug/debugwhite",
+	aim={
+		xPose="aim_yaw",
+		yPose="aim_pitch"
+	},
+	camera={
+		offset=Vector(0,0,50),
+	},
+	hull=Vector(15,15,50),
+	duckBy=10,
+	anims={
+		default={
+			idle="idle_magic",
+			walk="walk_magic",
+			run="run_magic",
+			crouch="cidle_magic",
+			crouch_walk="cwalk_magic",
+			glide="jump_magic",
+			jump="jump_magic",
+			swim="swimming_magic"
+		}
+	},
+	attack={
+		mode="auto",
+		delay=.2,
+		func=function(ply,ent)
+			ent:PillSound("attack",true)
+			local ball = ents.Create("sent_ball")
+			ball:SetPos(ply:GetShootPos()+ply:EyeAngles():Forward()*100)
+			ball:SetBallSize(20)
+			ball:Spawn()
+
+			local color = ent:GetPuppet():GetColor()
+			ball:SetBallColor(Vector(color.r/255,color.g/255,color.b/255))
+			ball:GetPhysicsObject():SetVelocity(ply:EyeAngles():Forward()*1000)
+		end
+	},
+	moveSpeed={
+		walk=40,
+		run=300,
+		ducked=20
+	},
+	modelScale=.8,
+	sounds={
+		attack="weapons/physcannon/energy_bounce1.wav"
+	},
+	jumpPower=400,
+	movePoseMode="xy",
+	health=80
 })

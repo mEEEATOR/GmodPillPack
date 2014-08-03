@@ -79,6 +79,7 @@ pk_pills.register("barnacle",{
 	type="phys",
 	model="models/barnacle.mdl",
 	boxPhysics={Vector(-10,-10,-20),Vector(10,10,0)},
+	default_rp_cost=1000,
 	userSpawn={
 		type="ceiling",
 		offset=Vector(0,0,2)
