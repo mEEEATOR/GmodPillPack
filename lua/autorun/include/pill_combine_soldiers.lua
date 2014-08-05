@@ -102,8 +102,9 @@ pk_pills.register("csoldier",{
 			end
 		end
 	end,
-	glideThink=function(ply,ent)
-		if ent.grappleEnd then
+	moveMod=function(ply,ent,mv,cmd)
+		//garbage code... vertical velocity predicted, lateral velocity not
+		if SERVER and ent.grappleEnd then
 			ent:PillAnimTick("rappel")
 			local targetVel = -500
 			if ply:KeyDown(IN_JUMP) then
@@ -112,15 +113,32 @@ pk_pills.register("csoldier",{
 					ent:PillSound("rappel_brake")
 					ent.grappleSliding=false
 				end
-				targetVel=-10
+				targetVel=0
 			else
 				if !ent.grappleSliding then
 					ent:PillLoopSound("rappel")
 					ent.grappleSliding=true
 				end
 			end
-			if ply:GetVelocity().z<targetVel then
-				ply:SetVelocity((ent.grappleEnd-ply:GetPos()):GetNormal()*30)
+			if mv:GetVelocity().z<targetVel then
+				local latforce = (ent.grappleEnd-mv:GetOrigin())*.05
+				latforce.z=0
+				mv:SetVelocity(mv:GetVelocity()+latforce)
+
+				local curvel = mv:GetVelocity()
+				curvel.z = targetVel
+				mv:SetVelocity(curvel)
+			end
+		end
+		if CLIENT and ent:GetPuppet():GetSequence()==ent:GetPuppet():LookupSequence("rappelloop") then //dumb
+			local targetVel = -500
+			if ply:KeyDown(IN_JUMP) then
+				targetVel=0
+			end
+			if mv:GetVelocity().z<targetVel then
+				local curvel = mv:GetVelocity()
+				curvel.z = targetVel
+				mv:SetVelocity(curvel)
 			end
 		end
 	end,

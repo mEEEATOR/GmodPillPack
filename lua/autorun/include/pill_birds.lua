@@ -27,26 +27,23 @@ pk_pills.register("bird_crow",{
 		run=40
 	},
 	health=20,
-	glideThink=function(ply,ent)
-		local plyangs = ply:EyeAngles()
-		plyangs.p = 0
-		local force -- -ply:GetVelocity()/40
-		if (ply:KeyDown(IN_JUMP)) then
-			force = plyangs:Forward()*100+Vector(0,0,100)
-			
-			ent:PillAnimTick("fly")
-			ent:PillLoopSound("fly",nil,ent.formTable.flapSoundPitch)
-		elseif (ply:KeyDown(IN_DUCK)) then
-			force = plyangs:Forward()*100+Vector(0,0,-100)
+	moveMod=function(ply,ent,mv,cmd)
+		if !ply:IsOnGround() then
+			local angs = mv:GetAngles()
 
-			ent:PillAnimTick("fly")
-			ent:PillLoopSound("fly",nil,ent.formTable.flapSoundPitch)
-		else
-			force = plyangs:Forward()*300+Vector(0,0,-20)
-
-			ent:PillLoopStop("fly")
+			if cmd:KeyDown(IN_JUMP) then
+				angs.p = -30
+				mv:SetVelocity(angs:Forward()*300)
+				if SERVER then ent:PillAnimTick("fly") end
+			elseif cmd:KeyDown(IN_DUCK) then
+				angs.p = 30
+				mv:SetVelocity(angs:Forward()*300)
+				if SERVER then ent:PillAnimTick("fly") end
+			else
+				angs.p = 10
+				mv:SetVelocity(angs:Forward()*500)
+			end
 		end
-		ply:SetLocalVelocity(force)
 	end,
 	land=function(ply,ent)
 		ent:PillLoopStop("fly")

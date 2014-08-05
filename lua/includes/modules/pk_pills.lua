@@ -1110,6 +1110,15 @@ hook.Add("PhysgunPickup","pk_pill_nograb", function(ply,ent)
 	end
 end)
 
+hook.Add("SetupMove","pk_pill_movemod", function(ply,mv,cmd)
+	local ent = getMappedEnt(ply)
+	if IsValid(ent) then
+		if ent.formTable.moveMod then
+			ent.formTable.moveMod(ply,ent,mv,cmd)
+		end
+	end
+end)
+
 //Includes
 if SERVER then include("i/sv_ai.lua") end
 include("i/vox.lua")

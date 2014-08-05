@@ -1,3 +1,9 @@
+/*
+ *	DO NOT USE THIS YET. IT IS NOT READY TO BE USED FOR ANYTHING.
+ */
+
+
+
 AddCSLuaFile()
 module("momo",package.seeall)
 _VERSION=0
