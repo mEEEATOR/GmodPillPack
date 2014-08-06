@@ -2,6 +2,7 @@ require("pk_pills")
 AddCSLuaFile()
 
 if SERVER then
+	resource.AddWorkshop("106427033")
 	include("include/drivemodes.lua")
 else
 	game.AddParticles("particles/Vortigaunt_FX.pcf")
@@ -31,34 +32,9 @@ include("include/pill_vorts.lua")
 
 include("include/pill_birds.lua")
 
-pk_pills.packFinalize()
-
 pk_pills.packStart("Fun Pills","fun","icon16/rainbow.png")
 
 include("include/pill_fun.lua")
 include("include/pill_fun2.lua")
 include("include/pill_fun3.lua")
 include("include/pill_360_noscope.lua")
-
-pk_pills.packFinalize()
-
-pk_pills.addFiles{
-	"models/birdbrainswagtrain/zombie/classic_frame.mdl",
-	"models/birdbrainswagtrain/zombie/fast_frame.mdl",
-	"models/birdbrainswagtrain/zombie/poison_frame.mdl",
-
-	"sound/birdbrainswagtrain/wow.wav",
-
-	"materials/pillsprites/shibe.png",
-	"materials/pillsprites/wow.png"
-}
-
-pk_pills.addIcons{
-	"pill_dropship_container",
-	"pill_dropship_strider",
-	"pill_wep_alyxgun",
-	"pill_wep_annabelle",
-	"pill_wep_translocator"
-}
-
-pk_pills.addWorkshop("106427033")

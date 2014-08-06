@@ -66,7 +66,7 @@ function packRequireGame(name,id)
 		end
 	end
 end
-
+/*
 if SERVER then var_downloads= CreateConVar("pk_pill_downloader","",{FCVAR_ARCHIVE}) end
 function packFinalize()
 	if CLIENT then return end
@@ -105,7 +105,7 @@ function addWorkshop(id)
 		resource.AddWorkshop(id)
 	end
 end
-
+*/
 function hasPack(name)
 	return table.HasValue(string.Explode(" ",packString), name)
 end
