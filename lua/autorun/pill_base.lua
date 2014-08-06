@@ -38,6 +38,7 @@ pk_pills.packStart("Fun Pills","fun","icon16/rainbow.png")
 include("include/pill_fun.lua")
 include("include/pill_fun2.lua")
 include("include/pill_fun3.lua")
+include("include/pill_360_noscope.lua")
 
 pk_pills.packFinalize()
 
