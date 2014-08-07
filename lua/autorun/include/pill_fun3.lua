@@ -203,6 +203,13 @@ pk_pills.register("dingus",{
 			ball:GetPhysicsObject():SetVelocity(ply:EyeAngles():Forward()*1000)
 		end
 	},
+	attack2={
+		mode="auto",
+		delay=1,
+		func=function(ply,ent)
+			ent:PillSound("donger")
+		end
+	},
 	moveSpeed={
 		walk=40,
 		run=300,
@@ -210,7 +217,9 @@ pk_pills.register("dingus",{
 	},
 	modelScale=.8,
 	sounds={
-		attack="weapons/physcannon/energy_bounce1.wav"
+		attack="weapons/physcannon/energy_bounce1.wav",
+		donger=pk_pills.helpers.makeList("birdbrainswagtrain/dingus#.wav",9),
+		donger_pitch=80
 	},
 	jumpPower=400,
 	movePoseMode="xy",
