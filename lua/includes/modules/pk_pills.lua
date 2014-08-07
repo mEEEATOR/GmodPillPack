@@ -1116,6 +1116,20 @@ hook.Add("SetupMove","pk_pill_movemod", function(ply,mv,cmd)
 		if ent.formTable.moveMod then
 			ent.formTable.moveMod(ply,ent,mv,cmd)
 		end
+		if ent.GetChargeTime and ent:GetChargeTime()!=0 then
+			local charge = ent.formTable.charge
+
+			//check if we should continue
+			local vel = mv:GetVelocity()
+			if ent:GetChargeTime()+.1<CurTime() and vel:Length()<charge.vel*.8 then
+				ent:SetChargeTime(0)
+				ent:PillLoopStop("charge")
+			else
+				local angs= ent:GetChargeAngs()
+				ply:SetEyeAngles(angs)
+				mv:SetVelocity(angs:Forward()*charge.vel)
+			end
+		end
 	end
 end)
 

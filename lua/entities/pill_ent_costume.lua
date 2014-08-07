@@ -9,6 +9,9 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Entity",0,"PillUser")
 
 	self:NetworkVar("Entity",1,"Puppet")
+
+	self:NetworkVar("Float",0,"ChargeTime")
+	self:NetworkVar("Angle",0,"ChargeAngs")
 end
 
 function ENT:Initialize()
@@ -534,23 +537,25 @@ function ENT:Think()
 		end
 
 		//charge
-		if self.charge then
+		if self:GetChargeTime()!=0 then
 			if ply:OnGround() then
 				local charge = self.formTable.charge
-				local angs= self.charge
+				/*local angs= self.charge
 				--print(ply:GetAbsVelocity())
 				if ply:GetAbsVelocity():Dot(angs:Forward()*charge.vel)/(charge.vel^2)<.5 then
 					//if !self.chargeStarted then
 					//	self.chargeStarted=true
 					///else
-						self.charge=nil
+						self:SetIsCharging(false)
 						self:PillLoopStop("charge")
 						return
 					//end
-				end
+				end*/
 
-				ply:SetLocalVelocity(angs:Forward()*charge.vel)
-				ply:SetEyeAngles(angs)
+				//ply:SetLocalVelocity(angs:Forward()*charge.vel)
+				//ply:SetEyeAngles(angs)
+
+				local angs=ply:EyeAngles()
 
 				self:PillAnimTick("charge_loop")
 
@@ -559,11 +564,11 @@ function ENT:Think()
 					self:PillGesture("charge_hit")
 					self:PillSound("charge_hit")
 
-					self.charge=nil
+					self:SetChargeTime(0)
 					self:PillLoopStop("charge")
 				end
 			else
-				self.charge=nil
+				self:SetChargeTime(0)
 				self:PillLoopStop("charge")
 			end
 		end
@@ -643,8 +648,8 @@ if SERVER then
 	function ENT:DoKeyPress(ply,key)
 		if self.animFreeze then return end
 
-		if self.charge then
-			self.charge=nil
+		if self:GetChargeTime()!=0 then
+			self:SetChargeTime(0)
 			self:PillLoopStop("charge")
 			return
 		end
@@ -779,21 +784,23 @@ if SERVER then
 
 	function ENT:PillChargeAttack()
 		if !self:GetPillUser():OnGround() or self.burrowed then return end
-		//self:GetPillUser():Freeze(true)
+
 		self:PillAnim("charge_start",true)
 		self:PillSound("charge_start")
 
-		local charge = self.formTable.charge
-		timer.Simple(charge.delay||1,function()
+		local function doStart()
 			if !IsValid(self) then return end
-			
-			self.charge=self:GetPillUser():EyeAngles()
-			self.charge.p=0
-
-			self:GetPillUser():SetLocalVelocity(self.charge:Forward()*charge.vel)
-
+			self:SetChargeTime(CurTime())
+			local angs = self:GetPillUser():EyeAngles()
+			angs.p=0
+			self:SetChargeAngs(angs)
 			self:PillLoopSound("charge")
-		end)
+		end
+		if self.formTable.charge.delay then
+			timer.Simple(self.formTable.charge.delay,doStart)
+		else
+			doStart()
+		end
 	end
 
 	function ENT:PillFilterCam(ent)
