@@ -978,11 +978,11 @@ if SERVER then
 	end)
 
 	//For compatibility with player resizer and God knows what else
-	hook.Add("SetPlayerSpeed", "pk_pill_speed_enforcer", function(ply,walk,run)
+	/*hook.Add("SetPlayerSpeed", "pk_pill_speed_enforcer", function(ply,walk,run)
 		if IsValid(getMappedEnt(ply)) then
 			return false
 		end
-	end)
+	end)*/
 
 	/*hook.Add("PlayerStepSoundTime", "pk_pill_step_time", function(ply,type,walking)    MEH!!
 		local ent = playerMap[ply]

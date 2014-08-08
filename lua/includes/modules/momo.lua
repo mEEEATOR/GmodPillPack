@@ -12,6 +12,7 @@ _VERSION=0
 CreateConVar("momo_version",_VERSION,{FCVAR_NOTIFY,FCVAR_NOT_CONNECTED},"MoMo version number.")
 
 include("momo/compat.lua")
+include("momo/tf2lib.lua")
 
 local components={}
 function registerComponent(compTable)
