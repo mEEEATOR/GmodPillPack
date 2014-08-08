@@ -18,7 +18,7 @@ function ENT:Initialize()
 			phys:Wake()
 			phys:EnableDrag(false)
 			phys:SetDamping(0,0)
-			phys:SetVelocity(self:GetAngles():Forward()*1000)
+			phys:SetVelocity(self:GetAngles():Forward()*(self.speed or 1000))
 		end
 		
 		timer.Simple(3||self.fuse,function()

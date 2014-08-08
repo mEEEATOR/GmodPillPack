@@ -17,7 +17,7 @@ function ENT:Initialize()
 			phys:EnableGravity(false)
 			phys:EnableDrag(false)
 			phys:SetDamping(0,0)
-			phys:SetVelocity(self:GetAngles():Forward()*3000)
+			phys:SetVelocity(self:GetAngles():Forward()*(self.speed or 3000))
 		end
 
 		if self.sound then
@@ -39,14 +39,14 @@ if SERVER then
 	function ENT:Think()
 		local tr
 		if self.noPhys then
-			tr = util.QuickTrace(self:GetPos(),self:GetAngles():Forward()*20,{self,self.shooter})
+			tr = util.QuickTrace(self:GetPos(),self:GetAngles():Forward()*(self.speed or 3000)*FrameTime(),{self,self.shooter})
 		end
 
 		if self:WaterLevel()>0 or tr and tr.Hit then
 			if self.altExplode then
 				ParticleEffect(self.altExplode.particle,self:GetPos(), Angle(0,0,0))
 				self:EmitSound(self.altExplode.sound)
-				util.BlastDamage(self,self:GetOwner(),self:GetPos(),100,100)
+				util.BlastDamage(self,self:GetOwner(),self:GetPos(),100*(self.radmod or 1),100*(self.dmgmod or 1))
 			else
 				local explode = ents.Create("env_explosion")
 				explode:SetPos(self:GetPos())
@@ -61,7 +61,10 @@ if SERVER then
 		end
 
 		if tr then
-			self:SetPos(self:GetPos()+self:GetAngles():Forward()*20)
+			self:SetPos(tr.HitPos)
+			if self.spin then
+				self:SetAngles(self:GetAngles()+Angle(0,0,180)*FrameTime())
+			end
 		end
 
 		self:NextThink(CurTime())
@@ -77,7 +80,7 @@ function ENT:PhysicsCollide( data, physobj )
 	if self.altExplode then
 		ParticleEffect(self.altExplode.particle,self:GetPos(), Angle(0,0,0))
 		self:EmitSound(self.altExplode.sound)
-		util.BlastDamage(self,self:GetOwner(),self:GetPos(),100,100)
+		util.BlastDamage(self,self:GetOwner(),self:GetPos(),100*(self.radmod or 1),100*(self.dmgmod or 1))
 	else
 		local explode = ents.Create("env_explosion")
 		explode:SetPos(self:GetPos())
