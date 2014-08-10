@@ -12,6 +12,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar("Float",0,"ChargeTime")
 	self:NetworkVar("Angle",0,"ChargeAngs")
+
+	self:NetworkVar("Float",1,"CloakLeft")
 end
 
 function ENT:Initialize()
@@ -187,6 +189,8 @@ function ENT:Initialize()
 			end
 		end
 
+		puppet:SetRenderMode(RENDERMODE_TRANSALPHA)
+
 		if self.formTable.visColor then
 			puppet:SetColor(self.formTable.visColor)
 		elseif self.formTable.visColorRandom then
@@ -224,6 +228,10 @@ function ENT:Initialize()
 					end
 				end
 			end
+		end
+
+		if self.formTable.cloak then
+			self:SetCloakLeft(self.formTable.cloak.max)
 		end
 
 		//puppet:SetParent(self)
@@ -540,20 +548,6 @@ function ENT:Think()
 		if self:GetChargeTime()!=0 then
 			if ply:OnGround() then
 				local charge = self.formTable.charge
-				/*local angs= self.charge
-				--print(ply:GetAbsVelocity())
-				if ply:GetAbsVelocity():Dot(angs:Forward()*charge.vel)/(charge.vel^2)<.5 then
-					//if !self.chargeStarted then
-					//	self.chargeStarted=true
-					///else
-						self:SetIsCharging(false)
-						self:PillLoopStop("charge")
-						return
-					//end
-				end*/
-
-				//ply:SetLocalVelocity(angs:Forward()*charge.vel)
-				//ply:SetEyeAngles(angs)
 
 				local angs=ply:EyeAngles()
 
@@ -572,6 +566,48 @@ function ENT:Think()
 				self:PillLoopStop("charge")
 			end
 		end
+
+		//Cloak
+		if self.formTable.cloak then
+			local cloak = self.formTable.cloak
+			if self.iscloaked then
+				local cloakamt = self:GetCloakLeft()
+				if cloakamt!=-1 then
+					cloakamt=cloakamt-FrameTime()
+					if cloakamt<0 then
+						cloakamt=0
+						self:ToggleCloak()
+					end
+					self:SetCloakLeft(cloakamt)
+				end
+			else
+				local cloakamt = self:GetCloakLeft()
+				if cloakmt!=-1 and cloakamt<cloak.max then
+					cloakamt=cloakamt+FrameTime()*cloak.rechargeRate
+					if cloakamt>cloak.max then
+						cloakamt=cloak.max
+					end
+					self:SetCloakLeft(cloakamt)
+				end
+			end
+
+			local color = self:GetPuppet():GetColor()
+			if self.iscloaked then
+				if color.a>0 then
+					color.a=color.a-5
+					self:GetPuppet():SetColor(color)
+				end
+			else
+				if color.a<255 then
+					color.a=color.a+5
+					self:GetPuppet():SetColor(color)
+				end
+			end
+			if IsValid(self.wepmdl) and self.wepmdl:GetColor().a!=color.a then
+				self.wepmdl:SetColor(color)
+			end
+		end
+
 		//if !IsValid(ply) then self:NextThink(CurTime()) return true end
 		//wepon-no longer SO hackey
 		if !self.formTable.hideWeapons then
@@ -861,6 +897,22 @@ function ENT:PillLoopStopAll()
 	if self.loopingSounds then
 		for _,v in pairs(self.loopingSounds) do
 			v:Stop()
+		end
+	end
+end
+
+function ENT:ToggleCloak()
+	local ply = self:GetPillUser()
+	if self.iscloaked then
+		self.iscloaked=nil
+		self:PillSound("uncloak")
+		pk_pills.setAiTeam(ply,self.formTable.side or "default")
+	else
+		local cloakleft = self:GetCloakLeft()
+		if cloakleft>0 or cloakleft==-1 then
+			self.iscloaked=true
+			self:PillSound("cloak")
+			pk_pills.setAiTeam(ply,"harmless")
 		end
 	end
 end

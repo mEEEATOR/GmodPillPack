@@ -236,12 +236,12 @@ pk_pills.register("hero_overseer",{
 		melee_miss=pk_pills.helpers.makeList("npc/zombie/claw_miss#.wav",2),
 
 		cloak="buttons/combine_button1.wav",
+		uncloak="buttons/combine_button1.wav",
 		teleport="ambient/machines/teleport4.wav"
 	},
-	--aim={
-	--	xPose="aim_yaw",
-	--	yPose="aim_pitch"
-	--},
+	cloak={
+		max=-1
+	},
 	moveSpeed={
 		walk=100,
 		run=1000,
@@ -253,7 +253,7 @@ pk_pills.register("hero_overseer",{
 	noFallDamage=true,
 	attack={
 		mode="trigger",
-		func = function(a,b,c) if !b.cloaked then pk_pills.common.melee(a,b,c) end end,
+		func = function(a,b,c) if !b.iscloaked then pk_pills.common.melee(a,b,c) end end,
 		delay=.3,
 		range=40,
 		dmg=1000
@@ -265,6 +265,11 @@ pk_pills.register("hero_overseer",{
 
 			ent:PillAnim("cloak",true)
 
+			timer.Simple(1,function()
+				if !IsValid(ent) then return end
+				ent:ToggleCloak()
+			end)
+/*
 			if ent.cloaked then
 				ent.cloaked=nil
 
@@ -285,11 +290,11 @@ pk_pills.register("hero_overseer",{
 					ent:GetPuppet():DrawShadow(false)
 					pk_pills.setAiTeam(ply,"harmless")
 				end)
-			end
+			end*/
 		end
 	},
 	reload=function(ply,ent)
-		if !ply:OnGround() or ent.cloaked then return end
+		if !ply:OnGround() then return end
 
 		ent:PillAnim("teleport",true)
 

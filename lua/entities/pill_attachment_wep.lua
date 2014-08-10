@@ -15,6 +15,7 @@ function ENT:Initialize()
 		else
 			self:AddEffects(bit.bor(EF_BONEMERGE,EF_BONEMERGE_FASTCULL))
 		end
+		self:SetRenderMode(RENDERMODE_TRANSALPHA)
 	end
 end
 
