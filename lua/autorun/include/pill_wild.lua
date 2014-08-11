@@ -17,7 +17,8 @@ pk_pills.register("ichthyosaur",{
 	},
 	aim={
 		xPose="sidetoside",
-		yPose="upanddown"
+		yPose="upanddown",
+		nocrosshair=true
 	},
 	attack={
 		mode="trigger",

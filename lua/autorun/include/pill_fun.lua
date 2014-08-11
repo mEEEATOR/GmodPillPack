@@ -86,6 +86,7 @@ pk_pills.register("turbobird",{
 		walk=100,
 		run=300
 	},
+	aim={},
 	anims={
 		default={
 			fly_rate=.5,
@@ -167,6 +168,7 @@ pk_pills.register("haxman",{
 	side="wild",
 	model="models/breen.mdl",
 	default_rp_cost=20000,
+	aim={},
 	anims={
 		default={
 			idle="idle_angry_melee",
@@ -266,6 +268,7 @@ pk_pills.register("phantom",{
 		nope="vo/Citadel/br_no.wav",
 		spook="ambient/creatures/town_child_scream1.wav"
 	},
+	aim={},
 	attack={
 		mode="trigger",
 		func = function(ply,ent)

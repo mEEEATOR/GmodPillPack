@@ -50,7 +50,8 @@ pk_pills.register("antlion",{
 	},
 	aim={
 		xPose="head_yaw",
-		yPose="head_pitch"
+		yPose="head_pitch",
+		nocrosshair=true
 	},
 	attack={
 		mode="trigger",
@@ -136,7 +137,8 @@ pk_pills.register("antlion_guard",{
 	},
 	aim={
 		xPose="head_yaw",
-		yPose="head_pitch"
+		yPose="head_pitch",
+		nocrosshair=true
 	},
 	attack={
 		mode="trigger",

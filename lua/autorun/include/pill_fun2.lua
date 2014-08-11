@@ -158,6 +158,7 @@ pk_pills.register("rpg",{
 		speed=30,
 		rocketMode=true
 	},
+	aim={},
 	damageFromWater=-1,
 	sounds={
 		loop_move="weapons/rpg/rocket1.wav"
@@ -190,6 +191,7 @@ pk_pills.register("rocket",{
 		{model="models/props_phx/torpedo.mdl"},
 		{model="models/props_phx/mk-82.mdl"}
 	} end,
+	aim={},
 	camera={
 		dist=300
 	},
@@ -223,6 +225,7 @@ pk_pills.register("rocket2",{
 	camera={
 		dist=600
 	},
+	aim={},
 	driveOptions={
 		speed=90,
 		rotation2=90

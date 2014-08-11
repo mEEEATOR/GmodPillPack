@@ -14,6 +14,7 @@ pk_pills.register("stalker",{
 			walk="walk_all"
 		}
 	},
+	aim={},
 	attack={
 		mode= "trigger",
 		func= function(ply,ent)

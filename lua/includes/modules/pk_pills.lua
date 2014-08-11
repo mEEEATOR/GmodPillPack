@@ -997,28 +997,49 @@ else //CLIENT HOOKS
 	hook.Add("HUDPaint","pk_pill_hud",function()
 		local ent = getMappedEnt(LocalPlayer())
 		if IsValid(ent) then
-			/*if (ent.formTable.health) then
+			if (ent.formTable.health) then
 				local hpMax=ent.formTable.health
 				local hpCurrent=ent:GetPillHealth()
-				draw.RoundedBox(6,40,ScrH()-80,184,50,Color(0,0,0,255))
+				
+				surface.SetDrawColor(Color(0,0,0))
+				surface.DrawRect(0,ScrH()-22,ScrW(),22)
+				
 				if !ent.formTable.onlyTakesExplosiveDamage then
+					surface.SetDrawColor(Color(255,60,40))
+					surface.DrawRect(0,ScrH()-20,ScrW()*math.min(hpCurrent/hpMax,1),20)
+
 					if hpCurrent>hpMax then
 						surface.SetDrawColor(Color(255,0,0))
-						surface.DrawRect(42,ScrH()-68,180,20)
-					else
-						draw.RoundedBox(6,42,ScrH()-78,math.Clamp(hpCurrent/hpMax*180,12,180),46,Color(255,60,40,255))
+						surface.DrawRect(0,ScrH()-20,ScrW()*math.min((hpCurrent-hpMax)/hpMax,1),20)
 					end
-					draw.SimpleText("Health: "..math.Round(hpCurrent).."/"..hpMax, "ChatFont", 130, ScrH() - 65, Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
-				else
-					draw.RoundedBox(6,42,ScrH()-78,math.max(hpCurrent/hpMax*180,12),46,Color(255,100,40,255))
-					draw.SimpleText("Hits Left: "..hpCurrent.."/"..hpMax, "ChatFont", 130, ScrH() - 65, Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
-				end
-			end*/
 
-			if ent.formTable.type=="phys"&&ent.formTable.aim&&ent.formTable.aim.attachment&&(!ent.formTable.aim.usesSecondaryEnt||IsValid(ent:GetPillAimEnt())) then
+					draw.SimpleText("Health: "..math.Round(hpCurrent).."/"..hpMax, "ChatFont", ScrW()/2, ScrH() - 18, Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
+				else
+					surface.SetDrawColor(Color(255,100,40))
+					surface.DrawRect(0,ScrH()-20,ScrW()*math.min(hpCurrent/hpMax,1),20)
+
+					draw.SimpleText("Hits Left: "..math.Round(hpCurrent).."/"..hpMax, "ChatFont", ScrW()/2, ScrH() - 18, Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
+				end
+			end
+
+			if ent.formTable.cloak and ent.formTable.cloak.max!=-1 then
+				surface.SetDrawColor(Color(0,0,0))
+				surface.DrawRect(ScrW()-370,ScrH()-110,300,30)
+
+				surface.SetDrawColor(Color(130,130,255))
+				surface.DrawRect(ScrW()-368,ScrH()-108,296*math.min(ent:GetCloakLeft()/ent.formTable.cloak.max,1),26)
+
+				draw.SimpleText("Cloak: "..string.format("%.3f",ent:GetCloakLeft()).." Seconds", "ChatFont", ScrW()-200, ScrH() - 102, Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_BOTTOM)
+			end
+
+			if ent.formTable.aim&&(!ent.formTable.aim.usesSecondaryEnt||IsValid(ent:GetPillAimEnt()))&&!ent.formTable.aim.nocrosshair then
 				local aimEnt=(ent.GetPillAimEnt&&IsValid(ent:GetPillAimEnt())&&ent:GetPillAimEnt())||ent
 
-				local attachment = aimEnt:GetAttachment(aimEnt:LookupAttachment(ent.formTable.aim.attachment))
+				local attachment
+				if ent.formTable.aim.attachment then
+					attachment = aimEnt:GetAttachment(aimEnt:LookupAttachment(ent.formTable.aim.attachment))
+				end
+				
 				local dir
 				if ent.formTable.aim.simple or !attachment then
 					dir = LocalPlayer():EyeAngles():Forward()
@@ -1026,9 +1047,9 @@ else //CLIENT HOOKS
 					dir = attachment.Ang:Forward()
 				end
 
-				local start= ent.formTable.aim.overrideStart&&ent:LocalToWorld(ent.formTable.aim.overrideStart)||attachment.Pos
+				local start= ent.formTable.aim.overrideStart&&ent:LocalToWorld(ent.formTable.aim.overrideStart)||(attachment&&attachment.Pos)||(ent.formTable.type=="ply"&&LocalPlayer():GetShootPos()||ent:GetPos())
 
-				local tr = util.QuickTrace(start,dir*99999, aimEnt)
+				local tr = util.QuickTrace(start,dir*99999, {aimEnt,LocalPlayer()})
 
 				local screenPos = tr.HitPos:ToScreen()
 

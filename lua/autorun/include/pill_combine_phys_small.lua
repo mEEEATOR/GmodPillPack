@@ -78,7 +78,8 @@ pk_pills.register("cityscanner",{
 	},
 	aim={
 		xPose="flex_horz",
-		yPose="flex_vert"
+		yPose="flex_vert",
+		nocrosshair=true
 	},
 	pose={
 		dynamo_wheel=function(ply,ent,old)
