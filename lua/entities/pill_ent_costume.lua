@@ -457,8 +457,10 @@ function ENT:Think()
 
 					seq_vel=puppet:GetSequenceGroundSpeed(puppet:GetSequence())
 
-					puppet:SetPoseParameter("move_x",localvel.x/seq_vel)
-					puppet:SetPoseParameter("move_y",-localvel.y/seq_vel)
+					if seq_vel!=0 then
+						puppet:SetPoseParameter("move_x",math.Clamp(localvel.x/seq_vel,-.99,.99))
+						puppet:SetPoseParameter("move_y",math.Clamp(-localvel.y/seq_vel,-.99,.99))
+					end
 					//print(puppet:GetPlaybackRate())
 				else
 					puppet:SetPoseParameter("move_x",0)
@@ -466,7 +468,7 @@ function ENT:Think()
 				end
 			end
 		end
-
+		
 		//Aimage
 		if self.formTable.aim then
 			if self.formTable.aim.xPose then
