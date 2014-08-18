@@ -41,3 +41,11 @@ Icon
 # =========================
 
 *.gma
+
+# Copyrighted CS:GO files
+
+models/chicken/**
+models/antlers/**
+
+materials/models/props_farm/**
+materials/models/antlers/**

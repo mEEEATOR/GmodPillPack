@@ -172,6 +172,9 @@ function ENT:Initialize()
 				if not skin then
 					skin=pickedOption.skin
 				end
+				if not attachments then
+					attachments=pickedOption.attachments
+				end
 			end
 		end
 

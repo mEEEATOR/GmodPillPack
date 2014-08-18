@@ -225,3 +225,79 @@ pk_pills.register("dingus",{
 	movePoseMode="xy",
 	health=80
 })
+
+pk_pills.register("error",{
+	printName="ERROR",
+	side="harmless",
+	type="ply",
+	model="models/error.mdl",
+	noragdoll=true,
+	default_rp_cost=800,
+	camera={
+		offset=Vector(0,0,25),
+		dist=100
+	},
+	hull=Vector(80,80,80),
+	anims={},
+	moveSpeed={
+		walk=200,
+		run=400
+	},
+	jumpPower=500,
+	health=128
+})
+
+pk_pills.register("chicken",{
+	printName="Chicken",
+	side="harmless",
+	type="ply",
+	model="models/chicken/chicken.mdl",
+	options=function() return {
+		{skin=0},
+		{skin=1}
+	} end,
+	noragdoll=true,
+	default_rp_cost=800,
+	camera={
+		offset=Vector(0,0,5),
+		dist=80
+	},
+	hull=Vector(15,15,15),
+	anims={
+		default={
+			idle="idle01",
+			walk="walk01",
+			run="run01",
+			glide="flap_falling"
+		}
+	},
+	moveSpeed={
+		walk=20,
+		run=120
+	},
+	noFallDamage=true,
+	health=30
+})
+
+pk_pills.register("turbochicken",{
+	printName="Fubar's Little Helper",
+	parent="chicken",
+	attachments={"models/antlers/antlers.mdl"},
+	default_rp_cost=8000,
+	camera={
+		offset=Vector(0,0,40),
+		dist=300
+	},
+	hull=Vector(90,90,90),
+	modelScale=6,
+	moveSpeed={
+		walk=120,
+		run=800
+	},
+	jumpPower=800,
+	health=300
+})
+
+//models/chicken/chicken.mdl
+//models/player/holiday/santahat.mdl
+//models/antlers/antlers.mdl
