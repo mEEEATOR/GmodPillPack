@@ -2,6 +2,19 @@ AddCSLuaFile()
 
 ENT.Type   = "anim"
 
+function ENT:Initialize()
+	self:SetModel("models/props_junk/PopCan01a.mdl")
+	self:DrawShadow(false)
+	if SERVER then
+		self:SetName("pill_target_"..self:EntIndex())
+	end
+end
+
+function ENT:Draw()
+
+end
+
+/*
 function ENT:SetupDataTables()
 	self:NetworkVar("Entity",0,"Owner")
 end

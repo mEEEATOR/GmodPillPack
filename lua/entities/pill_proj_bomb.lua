@@ -21,9 +21,17 @@ function ENT:Initialize()
 			phys:SetVelocity(self:GetAngles():Forward()*(self.speed or 1000))
 		end
 		
-		timer.Simple(3||self.fuse,function()
+		if self.sticky then
+			self:SetCustomCollisionCheck(true)
+		end
+
+		timer.Simple(self.fuse||3,function()
 			if IsValid(self) then
-				self:Remove()
+				if self.sticky then
+					self.armed=true
+				else
+					self:Remove()
+				end
 			end
 		end)
 	end
@@ -31,6 +39,7 @@ end
 
 function ENT:OnRemove()
 	if SERVER then
+		if self.sticky and !self.armed then return end
 		if self.tf2 then
 			ParticleEffect("ExplosionCore_MidAir",self:GetPos(), Angle(0,0,0))
 			self:EmitSound("weapons/explode1.wav")
@@ -46,6 +55,48 @@ function ENT:OnRemove()
 	end
 end
 
-function ENT:StartTouch(ent)
-	if (ent:IsNPC() or ent:IsPlayer() or ent:GetClass()=="pill_ent_phys") then self:Remove() end
+function ENT:Think()
+	if SERVER and self.sticky then
+		if !IsValid(self:GetOwner()) or !self:GetOwner():Alive() then
+			self.armed=false
+			self:Remove()
+		end
+		if self.armed and self:GetOwner():KeyDown(IN_ATTACK2) then
+			self:Remove()
+		end
+
+		self:NextThink(CurTime())
+		return true
+	end
 end
+
+function ENT:StartTouch(ent)
+	if !self.sticky and (ent:IsNPC() or ent:IsPlayer() or ent:GetClass()=="pill_ent_phys") then self:Remove() end
+end
+
+function ENT:PhysicsCollide(colData,collider)
+	if self.sticky then
+		if self:GetPhysicsObject():IsMotionEnabled() then
+			self:GetPhysicsObject():EnableMotion(false)
+			if !colData.HitEntity:IsWorld() then
+				self:SetParent(colData.HitEntity)
+			end
+		end
+	end
+end
+
+hook.Add("ShouldCollide","pk_pill_bomberman",function(bomb,other)
+	if bomb:GetClass()=="pill_proj_bomb" then
+		
+	elseif other:GetClass()=="pill_proj_bomb" then
+		local temp = bomb
+		bomb=other
+		other=temp
+	else
+		return
+	end
+
+	if other:GetClass()=="pill_proj_bomb" or other:IsNPC() or other:IsPlayer() then
+		return false
+	end
+end)

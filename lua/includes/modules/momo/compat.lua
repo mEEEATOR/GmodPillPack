@@ -9,7 +9,28 @@ AddCSLuaFile()
 //Fuck GM+
 
 local momo_hooks={}
-local old_hook_call=hook.Call
+
+//Ulib implements a different hook system. It is totally incompatible with our fix, but solves our problem for us!
+if file.IsDir("ulib","LUA") then
+	hook.Add("Initialize","momo_ulibhookfix",function()
+		for k,v in pairs(momo_hooks) do
+			hook.Add(k,"momo_compat_"..k,v,19)
+		end
+	end)
+else
+	local old_hook_call=hook.Call
+	function hook.Call(name,gm,...)
+		local a,b,c,d,e,f
+		if momo_hooks[name] then
+			a,b,c,d,e,f = momo_hooks[name](...)
+			if a!=nil then
+				return a,b,c,d,e,f
+			end
+		end
+		a,b,c,d,e,f = old_hook_call(name,gm,...)
+		return a,b,c,d,e,f
+	end
+end
 
 function hook.Call(name,gm,...)
 	local a,b,c,d,e,f
