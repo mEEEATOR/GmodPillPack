@@ -32,18 +32,6 @@ else
 	end
 end
 
-function hook.Call(name,gm,...)
-	local a,b,c,d,e,f
-	if momo_hooks[name] then
-		a,b,c,d,e,f = momo_hooks[name](...)
-		if a!=nil then
-			return a,b,c,d,e,f
-		end
-	end
-	a,b,c,d,e,f = old_hook_call(name,gm,...)
-	return a,b,c,d,e,f
-end
-
 function momo_hooks.CalcView(ply,pos,ang,fov,nearZ,farZ)
 	local ent = pk_pills.getMappedEnt(LocalPlayer())
 	if (IsValid(ent) and ply:GetViewEntity()==ent) then
