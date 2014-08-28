@@ -1,13 +1,13 @@
 AddCSLuaFile()
 
 //Speed modifications done by tf2 weapons, effects, etc.
-hook.Add("SetupMove","momo_movespeedmod", function(ply,mv,cmd)
+hook.Add("SetupMove","momo_tf2_movemod", function(ply,mv,cmd)
 	local speedmod = 1
 	
 	//Check weapons
 	for _,wep in pairs(ply:GetWeapons()) do
-		if wep.MoMoMoveSpeedMod then
-			local thismod = wep:MoMoMoveSpeedMod()
+		if wep.momo_speedMod then
+			local thismod = wep:momo_speedMod()
 			if thismod then speedmod=speedmod*thismod end
 		end
 	end
