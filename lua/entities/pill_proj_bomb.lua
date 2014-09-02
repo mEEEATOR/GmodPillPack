@@ -13,6 +13,10 @@ function ENT:Initialize()
 			self:SetSolid(SOLID_VPHYSICS)
 		end
 
+		if self.particle then
+			ParticleEffectAttach(self.particle,PATTACH_ABSORIGIN_FOLLOW,self,0)
+		end
+
 		local phys = self:GetPhysicsObject()
 		if (phys:IsValid()) then
 			phys:Wake()
@@ -29,6 +33,7 @@ function ENT:Initialize()
 			if IsValid(self) then
 				if self.sticky then
 					self.armed=true
+					ParticleEffect("stickybomb_pulse_red",self:GetPos(), Angle(0,0,0))
 				else
 					self:Remove()
 				end

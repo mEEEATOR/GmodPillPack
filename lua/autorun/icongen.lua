@@ -27,7 +27,7 @@ AddCSLuaFile()
 
 
 if CLIENT then
-	local matBack=Material("icongen/back.png")
+	local matBack=Material("icongen/back-ent.png")
 	local matFront=Material("icongen/front.png")
 
 	concommand.Add("pk_iconmaker",function(ply,cmd,args,str)

@@ -17,6 +17,7 @@ if SERVER then
 		local tr = util.QuickTrace(self:GetPos(),self:GetAngles():Forward()*(self.speed or 3000)*FrameTime(),{self,self:GetOwner()})
 
 		if tr.HitWorld then
+			self:StopParticles()
 			self.stuck=true
 			timer.Simple(10,function() if IsValid(self) then self:Remove() end end)
 		elseif tr.Hit then
