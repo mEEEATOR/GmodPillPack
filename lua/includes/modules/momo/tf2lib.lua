@@ -6,8 +6,8 @@ hook.Add("SetupMove","momo_tf2_movemod", function(ply,mv,cmd)
 	
 	//Check weapons
 	for _,wep in pairs(ply:GetWeapons()) do
-		if wep.momo_speedMod then
-			local thismod = wep:momo_speedMod()
+		if wep.momo_SpeedMod then
+			local thismod = wep:momo_SpeedMod()
 			if thismod then speedmod=speedmod*thismod end
 		end
 	end

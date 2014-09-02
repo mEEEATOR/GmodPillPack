@@ -431,7 +431,7 @@ function ENT:Think()
 
 		local seq_vel=puppet:GetSequenceGroundSpeed(puppet:GetSequence())
 		//if true then
-		if self.formTable.movePoseMode!="xy" and !overrideRate then
+		if self.formTable.movePoseMode!="xy" and self.formTable.movePoseMode!="xy-bot" and !overrideRate then
 			
 			local rate = overrideRate or vel/seq_vel
 			
@@ -469,6 +469,32 @@ function ENT:Think()
 					puppet:SetPoseParameter("move_x",0)
 					puppet:SetPoseParameter("move_y",0)
 				end
+			elseif self.formTable.movePoseMode=="xy-bot" then
+				if !overrideRate then
+					local localvel = ply:WorldToLocal(ply:GetPos()+ply:GetVelocity())
+					local maxdim = math.Max(math.abs(localvel.x),math.abs(localvel.y))
+					local clampedvel = maxdim==0 and Vector(0,0,0) or localvel/maxdim
+					local move_dir = puppet:WorldToLocalAngles(ply:GetVelocity():Angle())
+
+					puppet:SetPoseParameter("move_x",clampedvel.x)
+					puppet:SetPoseParameter("move_y",-clampedvel.y)
+					puppet:SetPoseParameter("move_yaw",move_dir.y)
+					puppet:SetPoseParameter("move_scale",1)
+
+					seq_vel=puppet:GetSequenceGroundSpeed(puppet:GetSequence())
+
+					if seq_vel!=0 then
+						puppet:SetPoseParameter("move_x",math.Clamp(localvel.x/seq_vel,-.99,.99))
+						puppet:SetPoseParameter("move_y",math.Clamp(-localvel.y/seq_vel,-.99,.99))
+						puppet:SetPoseParameter("move_scale",math.Clamp(localvel:Length()/seq_vel,-.99,.99))
+					end
+					//print(puppet:GetPlaybackRate())
+				else
+					puppet:SetPoseParameter("move_x",0)
+					puppet:SetPoseParameter("move_y",0)
+					puppet:SetPoseParameter("move_yaw",0)
+					puppet:SetPoseParameter("move_scale",0)
+				end
 			end
 		end
 		
@@ -500,11 +526,12 @@ function ENT:Think()
 		end
 
 		//water death
-		self.touchingWater=ply:WaterLevel()>0
+		self.touchingWater=ply:WaterLevel()>1
 
 		if (self.formTable.damageFromWater && self.touchingWater) then
 			if self.formTable.damageFromWater==-1 then
-				self:PillDie()
+				//self:PillDie()
+				ply:Kill()
 			else
 				ply:TakeDamage(self.formTable.damageFromWater)
 				//TODO APPLY DAMAGE

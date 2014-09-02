@@ -27,7 +27,7 @@ AddCSLuaFile()
 
 
 if CLIENT then
-	local matBack=Material("icongen/back-ent.png")
+	local matBack=Material("icongen/back.png")
 	local matFront=Material("icongen/front.png")
 
 	concommand.Add("pk_iconmaker",function(ply,cmd,args,str)
@@ -44,7 +44,7 @@ if CLIENT then
 		color:SetPos(10,30)
 		color:SetAlphaBar(false)
 		//color:SetColor(Color(200,60,60)) tf2 default red
-		color:SetColor(Color(197,175,145))
+		color:SetColor(Color(200,60,60))
 
 		local model = vgui.Create( "DAdjustableModelPanel",frame)
 		model:SetPos(270,30)
@@ -62,14 +62,14 @@ if CLIENT then
 		end
 
 		//Custom
-		//model:GetEntity():SetBodygroup(1,1)
+		//model:GetEntity():SetSkin(1)
 		/*model:GetEntity():SetBodygroup(2,1)
 		model:GetEntity():SetBodygroup(3,1)
 		model:GetEntity():SetBodygroup(4,1)*/
 		//model:GetEntity():SetMaterial("Models/antlion_guard/antlionGuard2")
 		//model:GetEntity():SetSkin(2)
 		//model:GetEntity():SetBodygroup(3,1)
-		model:GetEntity():SetColor(Color(120,70,210))
+		//model:GetEntity():SetColor(Color(120,70,210))
 		
 
 		local superPaint = model.Paint
