@@ -4,11 +4,11 @@ AddCSLuaFile()
 if SERVER then
 	resource.AddWorkshop("106427033")
 	include("include/drivemodes.lua")
-else
-	game.AddParticles("particles/Vortigaunt_FX.pcf")
-	PrecacheParticleSystem("vortigaunt_beam")
-	PrecacheParticleSystem("vortigaunt_beam_b")
 end
+
+game.AddParticles("particles/Vortigaunt_FX.pcf")
+PrecacheParticleSystem("vortigaunt_beam")
+PrecacheParticleSystem("vortigaunt_beam_b")
 
 include("include/vox_lists.lua")
 

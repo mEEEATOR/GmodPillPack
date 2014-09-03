@@ -3,6 +3,10 @@ AddCSLuaFile()
 ENT.Type   = "anim"
 ENT.PrintName = "Rocket"
 
+function ENT:SetupDataTables()
+	self:NetworkVar("String",0,"Particle")
+end
+
 function ENT:Initialize()
 	if SERVER then
 		if !self.noPhys then
@@ -28,10 +32,10 @@ function ENT:Initialize()
 		if self.trail then
 			util.SpriteTrail(self,0,self.tcolor or Color(255,255,255),false,40,10,5, 1/100,self.trail)
 		end
+	end
 
-		if self.particle then
-			ParticleEffectAttach(self.particle,PATTACH_ABSORIGIN_FOLLOW,self,0)
-		end
+	if self:GetParticle()!="" then
+		ParticleEffectAttach(self:GetParticle(),PATTACH_ABSORIGIN_FOLLOW,self,0)
 	end
 end
 
