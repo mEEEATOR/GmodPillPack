@@ -3,6 +3,10 @@ AddCSLuaFile()
 ENT.Type   = "anim"
 ENT.PrintName = "Bomb"
 
+function ENT:SetupDataTables()
+	self:NetworkVar("String",0,"Particle")
+end
+
 function ENT:Initialize()
 	if SERVER then
 		if self.sphere then
@@ -11,10 +15,6 @@ function ENT:Initialize()
 			self:PhysicsInit(SOLID_VPHYSICS )
 			self:SetMoveType(MOVETYPE_VPHYSICS)
 			self:SetSolid(SOLID_VPHYSICS)
-		end
-
-		if self.particle then
-			ParticleEffectAttach(self.particle,PATTACH_ABSORIGIN_FOLLOW,self,0)
 		end
 
 		local phys = self:GetPhysicsObject()
@@ -39,6 +39,10 @@ function ENT:Initialize()
 				end
 			end
 		end)
+	end
+
+	if self:GetParticle()!="" then
+		ParticleEffectAttach(self:GetParticle(),PATTACH_ABSORIGIN_FOLLOW,self,0)
 	end
 end
 
