@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 //Module starts here...
 module("pk_pills",package.seeall)
-version="1.2-BETA"
+version="1.2"
 
 //
 //Load files
