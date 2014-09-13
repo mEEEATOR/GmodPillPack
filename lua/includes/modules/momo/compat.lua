@@ -126,7 +126,7 @@ function meta_player:GetViewEntity()
 end
 
 function meta_player:SetViewEntity(ent)
-	if ent:GetClass()=="pill_ent_phys" or ent:GetClass()=="pill_ent_costume" then ent=self end
+	if IsValid(ent) and (ent:GetClass()=="pill_ent_phys" or ent:GetClass()=="pill_ent_costume") then ent=self end
 	old_setviewentity(self,ent)
 end
 
