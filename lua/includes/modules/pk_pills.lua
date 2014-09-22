@@ -277,7 +277,6 @@ end
 if SERVER then
 	CreateConVar("pk_pill_packs","",{FCVAR_NOTIFY,FCVAR_NOT_CONNECTED},"This is a list of the registered pill packs. Don't change it.")
 	CreateConVar("pk_pill_version",version,{FCVAR_NOTIFY,FCVAR_NOT_CONNECTED},"This is the version of the pill pack. Don't change it.")
-	var_adminonly= CreateConVar("pk_pill_adminonly",game.IsDedicated() and 1 or 0,{FCVAR_NOTIFY,FCVAR_ARCHIVE})
 
 	concommand.Add("pk_pill_apply", function(ply,cmd,args,str)
 		apply(ply,args[1],"user",tonumber(args[2]))
@@ -334,8 +333,6 @@ if SERVER then
 		
 		wep:SetForm(pill)
 	end)
-else
-	var_thirdperson= CreateConVar("pk_pill_thirdperson",1,FCVAR_ARCHIVE) //THIS IS WHERE IT SHOULD BE
 end
 
 
@@ -452,7 +449,6 @@ if CLIENT then
 
 		return html
 	end)
-	
 
 	spawnmenu.AddCreationTab("Pills", function()
 		local ctrl = vgui.Create("SpawnmenuContentPanel")
@@ -500,12 +496,49 @@ if CLIENT then
 			self.SpawnPanel = vgui.Create("DPanel", ctrl)
 			self.SpawnPanel:SetVisible(false)
 
-			local checkbox = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
-			checkbox:SetPos(20, 20)
-			checkbox:SetText("Thirdperson")
-			checkbox:SetTextColor(Color(0,0,0))
-			checkbox:SetConVar("pk_pill_thirdperson")
-			checkbox:SizeToContents()
+			local checkbox_thirdperson = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
+			checkbox_thirdperson:SetPos(20, 20)
+			checkbox_thirdperson:SetText("Thirdperson")
+			checkbox_thirdperson:SetTextColor(Color(0,0,0))
+			checkbox_thirdperson:SetConVar("momo_cl_thirdperson")
+			checkbox_thirdperson:SizeToContents()
+
+			local checkbox_hidehud = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
+			checkbox_hidehud:SetPos(20, 40)
+			checkbox_hidehud:SetText("Hide HUD")
+			checkbox_hidehud:SetTextColor(Color(0,0,0))
+			checkbox_hidehud:SetConVar("momo_cl_hidehud")
+			checkbox_hidehud:SizeToContents()
+
+			local function AdminConVarChanged(self,val)
+				if ( !self.m_strConVar ) then return end
+				RunConsoleCommand("momo_admin_set",string.sub(self.m_strConVar,12),val)
+			end
+
+			local checkbox_admin_restrict = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
+			checkbox_admin_restrict:SetPos(20, 120)
+			checkbox_admin_restrict:SetText("Restrict Morphing to Admins")
+			checkbox_admin_restrict:SetTextColor(Color(0,0,0))
+			checkbox_admin_restrict:SetConVar("momo_admin_restrict")
+			checkbox_admin_restrict:SizeToContents()
+			checkbox_admin_restrict.Button.ConVarChanged = AdminConVarChanged
+
+			local checkbox_admin_neverfreeze = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
+			checkbox_admin_neverfreeze:SetPos(20, 140)
+			checkbox_admin_neverfreeze:SetText("Never Freeze Movement when Morphed")
+			checkbox_admin_neverfreeze:SetTextColor(Color(0,0,0))
+			checkbox_admin_neverfreeze:SetConVar("momo_admin_neverfreeze")
+			checkbox_admin_neverfreeze:SizeToContents()
+			checkbox_admin_neverfreeze.Button.ConVarChanged = AdminConVarChanged
+
+			local checkbox_admin_anyweapons = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
+			checkbox_admin_anyweapons:SetPos(20, 160)
+			checkbox_admin_anyweapons:SetText("Allow Use of Any Weapon when Morphed")
+			checkbox_admin_anyweapons:SetTextColor(Color(0,0,0))
+			checkbox_admin_anyweapons:SetConVar("momo_admin_anyweapons")
+			checkbox_admin_anyweapons:SizeToContents()
+			checkbox_admin_anyweapons.Button.ConVarChanged = AdminConVarChanged
+
 		end
 
 		node_settings.DoClick = function(self)
@@ -645,7 +678,7 @@ if SERVER then
 				success=false
 			end
 
-			if var_adminonly:GetBool() then
+			if momo.convars.admin_restrict:GetBool() then
 				if not ply:IsAdmin() then
 					ply:ChatPrint("Pills are restricted to Admins.")
 					success=false
@@ -935,7 +968,7 @@ if SERVER then
 	hook.Add("PlayerCanPickupWeapon","pk_pill_pickupWeapon",function(ply,wep)
 		if IsValid(getMappedEnt(ply)) then
 			if getMappedEnt(ply).formTable.type=="ply" then
-				if getMappedEnt(ply).formTable.validHoldTypes&&table.HasValue(getMappedEnt(ply).formTable.validHoldTypes,wep:GetHoldType()) then
+				if momo.convars.admin_anyweapons:GetBool() or (getMappedEnt(ply).formTable.validHoldTypes&&table.HasValue(getMappedEnt(ply).formTable.validHoldTypes,wep:GetHoldType())) then
 					return true
 				end
 				return false
@@ -995,6 +1028,8 @@ if SERVER then
 	end)*/
 else //CLIENT HOOKS
 	hook.Add("HUDPaint","pk_pill_hud",function()
+		if momo.convars.cl_hidehud:GetBool() then return end
+
 		local ent = getMappedEnt(LocalPlayer())
 		if IsValid(ent) then
 			if (ent.formTable.health) then

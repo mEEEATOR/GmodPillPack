@@ -42,7 +42,7 @@ function momo_hooks.CalcView(ply,pos,ang,fov,nearZ,farZ)
 			startpos=pos
 		end
 
-		if pk_pills.var_thirdperson:GetBool() then
+		if momo.convars.cl_thirdperson:GetBool() then
 			local dist
 			if ent.formTable.type=="phys"&&ent.formTable.camera&&ent.formTable.camera.distFromSize then
 				dist = ent:BoundingRadius()*5
@@ -80,7 +80,7 @@ end
 function momo_hooks.CalcViewModelView(wep,vm,oldPos,oldAng,pos,ang)
 	local ent = pk_pills.getMappedEnt(LocalPlayer())
 	local ply = wep.Owner
-	if (IsValid(ent) and ply:GetViewEntity()==ent and pk_pills.var_thirdperson:GetBool()) then
+	if (IsValid(ent) and ply:GetViewEntity()==ent and momo.convars.cl_thirdperson:GetBool()) then
 		return oldPos+oldAng:Forward()*-500,ang
 	end
 end

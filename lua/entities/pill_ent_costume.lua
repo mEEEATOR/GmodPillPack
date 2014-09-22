@@ -678,7 +678,7 @@ function ENT:Think()
 			end
 		end
 	else
-		if self:GetPillUser()!=LocalPlayer() or pk_pills.var_thirdperson:GetBool() then
+		if self:GetPillUser()!=LocalPlayer() or momo.convars.cl_thirdperson:GetBool() then
 			puppet:SetNoDraw(false)
 		else
 			puppet:SetNoDraw(true)
@@ -824,7 +824,7 @@ if SERVER then
 	function ENT:PillAnim(name,freeze)
 		self.anim=name
 		self.animStart=true
-		if freeze then
+		if freeze and !momo.convars.admin_neverfreeze:GetBool() then
 			self.animFreeze=true
 		else
 			self.animFreeze=nil

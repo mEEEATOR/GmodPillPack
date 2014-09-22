@@ -2,17 +2,13 @@
  *	DO NOT USE THIS YET. IT IS NOT READY TO BE USED FOR ANYTHING.
  */
 
-
-
 AddCSLuaFile()
 module("momo",package.seeall)
 _VERSION=0
 
-//Convars
-CreateConVar("momo_version",_VERSION,{FCVAR_NOTIFY,FCVAR_NOT_CONNECTED},"MoMo version number.")
-
 include("momo/compat.lua")
 include("momo/tf2lib.lua")
+include("momo/console.lua")
 
 local components={}
 function registerComponent(compTable)

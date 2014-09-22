@@ -542,7 +542,7 @@ function ENT:PillLoopStopAll()
 end
 
 function ENT:Draw()
-	if self:GetPillUser()!=LocalPlayer() or pk_pills.var_thirdperson:GetBool() then
+	if self:GetPillUser()!=LocalPlayer() or momo.convars.cl_thirdperson:GetBool() then
 		if self.formTable.sprite then
 			if !self.spriteMat then
 				self.spriteMat= Material(self.formTable.sprite.mat)
