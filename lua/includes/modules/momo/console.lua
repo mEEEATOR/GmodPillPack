@@ -20,7 +20,7 @@ end
 //Admin var setter command.
 local function admin_set(ply,cmd,args)
 	if !ply:IsSuperAdmin() then
-		ply:PrintMessage(HUD_PRINTNOTIFY,"You must be a super admin to use this command.")
+		ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
 		return
 	end
 
@@ -28,19 +28,20 @@ local function admin_set(ply,cmd,args)
 	local value = args[2]
 
 	if !var then
-		ply:PrintMessage(HUD_PRINTNOTIFY,"Please supply a valid convar name. Do not include 'momo_admin_'.")
+		ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a valid convar name. Do not include 'momo_admin_'.")
 		return
 	elseif !ConVarExists("momo_admin_"..var) then
-		ply:PrintMessage(HUD_PRINTNOTIFY,"Convar 'momo_admin_"..var.."' does not exist. Please supply a valid convar name. Do not include 'momo_admin_'.")
+		ply:PrintMessage(HUD_PRINTCONSOLE,"Convar 'momo_admin_"..var.."' does not exist. Please supply a valid convar name. Do not include 'momo_admin_'.")
 		return
 	end
 
 	if !value then
-		ply:PrintMessage(HUD_PRINTNOTIFY,"Please supply a value to set the convar to.")
+		ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a value to set the convar to.")
 		return
 	end
 
 	RunConsoleCommand("momo_admin_"..var,value)
+	print(">>momo admin setter ran")
 end
 
 concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.")
