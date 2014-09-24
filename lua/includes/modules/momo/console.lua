@@ -3,7 +3,7 @@ AddCSLuaFile()
 //Convars
 momo.convars = {}
 
-momo.convars.version = CreateConVar("momo_version",_VERSION,FCVAR_NOT_CONNECTED,"Morph Mod version number. READ ONLY!")
+momo.convars.version = CreateConVar("momo_version",momo._VERSION,FCVAR_NOT_CONNECTED,"Morph Mod version number. READ ONLY!")
 
 //Admin vars
 if SERVER then
