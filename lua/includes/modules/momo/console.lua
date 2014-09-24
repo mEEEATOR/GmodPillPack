@@ -19,7 +19,7 @@ if CLIENT then
 end
 
 //Admin var setter command.
-//if SERVER then
+if SERVER then
 	local function admin_set(ply,cmd,args)
 		if !ply:IsSuperAdmin() then
 			ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
@@ -47,7 +47,7 @@ end
 	end
 
 	concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.")
-//end
+end
 
 //Deprecated commands and convars.
 concommand.Add("pk_pill_adminonly",function(ply,cmd,args)
