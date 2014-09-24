@@ -6,12 +6,11 @@ momo.convars = {}
 momo.convars.version = CreateConVar("momo_version",momo._VERSION,FCVAR_NOT_CONNECTED,"Morph Mod version number. READ ONLY!")
 
 //Admin vars
-if SERVER then
-	momo.convars.admin_restrict = CreateConVar("momo_admin_restrict",game.IsDedicated() and 1 or 0,FCVAR_REPLICATED+FCVAR_NOTIFY,"Restrict morphing to admins.")
+momo.convars.admin_restrict = CreateConVar("momo_admin_restrict",game.IsDedicated() and 1 or 0,FCVAR_REPLICATED+FCVAR_NOTIFY,"Restrict morphing to admins.")
 
-	momo.convars.admin_neverfreeze = CreateConVar("momo_admin_neverfreeze",0,FCVAR_REPLICATED,"Never freeze movement when morphed.")
-	momo.convars.admin_anyweapons = CreateConVar("momo_admin_anyweapons",0,FCVAR_REPLICATED,"Allow use of any weapon when morphed.")
-end
+momo.convars.admin_neverfreeze = CreateConVar("momo_admin_neverfreeze",0,FCVAR_REPLICATED,"Never freeze movement when morphed.")
+momo.convars.admin_anyweapons = CreateConVar("momo_admin_anyweapons",0,FCVAR_REPLICATED,"Allow use of any weapon when morphed.")
+
 
 //Client vars
 if CLIENT then
@@ -20,7 +19,7 @@ if CLIENT then
 end
 
 //Admin var setter command.
-if SERVER then
+//if SERVER then
 	local function admin_set(ply,cmd,args)
 		if !ply:IsSuperAdmin() then
 			ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
@@ -47,8 +46,8 @@ if SERVER then
 		print(">>momo admin setter ran")
 	end
 
-	concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.",FCVAR_REPLICATED)
-end
+	concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.")
+//end
 
 //Deprecated commands and convars.
 concommand.Add("pk_pill_adminonly",function(ply,cmd,args)
