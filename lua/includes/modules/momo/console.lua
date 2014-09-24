@@ -43,7 +43,6 @@ if SERVER then
 		end
 
 		RunConsoleCommand("momo_admin_"..var,value)
-		print(">>momo admin setter ran")
 	end
 
 	concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.")
