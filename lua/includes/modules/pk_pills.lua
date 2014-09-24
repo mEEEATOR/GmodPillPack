@@ -499,16 +499,23 @@ if CLIENT then
 			local checkbox_thirdperson = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_thirdperson:SetPos(20, 20)
 			checkbox_thirdperson:SetText("Thirdperson")
-			checkbox_thirdperson:SetTextColor(Color(0,0,0))
+			checkbox_thirdperson:SetDark(true)
 			checkbox_thirdperson:SetConVar("momo_cl_thirdperson")
 			checkbox_thirdperson:SizeToContents()
 
 			local checkbox_hidehud = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_hidehud:SetPos(20, 40)
 			checkbox_hidehud:SetText("Hide HUD")
-			checkbox_hidehud:SetTextColor(Color(0,0,0))
+			checkbox_hidehud:SetDark(true)
 			checkbox_hidehud:SetConVar("momo_cl_hidehud")
 			checkbox_hidehud:SizeToContents()
+
+			local heading_admin = vgui.Create("DLabel",self.SpawnPanel)
+			heading_admin:SetPos(20, 80)
+			heading_admin:SetText("Admin Settings")
+			heading_admin:SetFont("DermaLarge")
+			heading_admin:SetColor(Color(255,0,0))
+			heading_admin:SizeToContents()
 
 			local function AdminConVarChanged(self,val)
 				if ( !self.m_strConVar ) then return end
@@ -518,7 +525,7 @@ if CLIENT then
 			local checkbox_admin_restrict = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_admin_restrict:SetPos(20, 120)
 			checkbox_admin_restrict:SetText("Restrict Morphing to Admins")
-			checkbox_admin_restrict:SetTextColor(Color(0,0,0))
+			checkbox_admin_restrict:SetDark(true)
 			checkbox_admin_restrict:SetConVar("momo_admin_restrict")
 			checkbox_admin_restrict:SizeToContents()
 			checkbox_admin_restrict.Button.ConVarChanged = AdminConVarChanged
@@ -526,7 +533,7 @@ if CLIENT then
 			local checkbox_admin_neverfreeze = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_admin_neverfreeze:SetPos(20, 140)
 			checkbox_admin_neverfreeze:SetText("Never Freeze Movement when Morphed")
-			checkbox_admin_neverfreeze:SetTextColor(Color(0,0,0))
+			checkbox_admin_neverfreeze:SetDark(true)
 			checkbox_admin_neverfreeze:SetConVar("momo_admin_neverfreeze")
 			checkbox_admin_neverfreeze:SizeToContents()
 			checkbox_admin_neverfreeze.Button.ConVarChanged = AdminConVarChanged
@@ -534,7 +541,7 @@ if CLIENT then
 			local checkbox_admin_anyweapons = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_admin_anyweapons:SetPos(20, 160)
 			checkbox_admin_anyweapons:SetText("Allow Use of Any Weapon when Morphed")
-			checkbox_admin_anyweapons:SetTextColor(Color(0,0,0))
+			checkbox_admin_anyweapons:SetDark(true)
 			checkbox_admin_anyweapons:SetConVar("momo_admin_anyweapons")
 			checkbox_admin_anyweapons:SizeToContents()
 			checkbox_admin_anyweapons.Button.ConVarChanged = AdminConVarChanged
@@ -1148,7 +1155,7 @@ else //CLIENT HOOKS
 			checkbox:SetParent(panel)
 			checkbox:SetPos(10, 30)
 			checkbox:SetText("Thirdperson")
-			checkbox:SetTextColor(Color(0,0,0))
+			checkbox:SetDark(true)
 			checkbox:SetConVar("pk_pill_thirdperson")
 			checkbox:SizeToContents()
 		end)
