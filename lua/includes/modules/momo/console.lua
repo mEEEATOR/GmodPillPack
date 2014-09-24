@@ -3,13 +3,15 @@ AddCSLuaFile()
 //Convars
 momo.convars = {}
 
-momo.convars.version = CreateConVar("momo_version",_VERSION,FCVAR_NOTIFY+FCVAR_NOT_CONNECTED,"Morph Mod version number. READ ONLY!")
+momo.convars.version = CreateConVar("momo_version",_VERSION,FCVAR_NOT_CONNECTED,"Morph Mod version number. READ ONLY!")
 
 //Admin vars
-momo.convars.admin_restrict = CreateConVar("momo_admin_restrict",game.IsDedicated() and 1 or 0,FCVAR_NOTIFY,"Restrict morphing to admins.")
+if SERVER then
+	momo.convars.admin_restrict = CreateConVar("momo_admin_restrict",game.IsDedicated() and 1 or 0,FCVAR_REPLICATED+FCVAR_NOTIFY,"Restrict morphing to admins.")
 
-momo.convars.admin_neverfreeze = CreateConVar("momo_admin_neverfreeze",0,FCVAR_NONE,"Never freeze movement when morphed.")
-momo.convars.admin_anyweapons = CreateConVar("momo_admin_anyweapons",0,FCVAR_NONE,"Allow use of any weapon when morphed.")
+	momo.convars.admin_neverfreeze = CreateConVar("momo_admin_neverfreeze",0,FCVAR_REPLICATED,"Never freeze movement when morphed.")
+	momo.convars.admin_anyweapons = CreateConVar("momo_admin_anyweapons",0,FCVAR_REPLICATED,"Allow use of any weapon when morphed.")
+end
 
 //Client vars
 if CLIENT then
@@ -18,33 +20,35 @@ if CLIENT then
 end
 
 //Admin var setter command.
-local function admin_set(ply,cmd,args)
-	if !ply:IsSuperAdmin() then
-		ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
-		return
+if SERVER then
+	local function admin_set(ply,cmd,args)
+		if !ply:IsSuperAdmin() then
+			ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
+			return
+		end
+
+		local var = args[1]
+		local value = args[2]
+
+		if !var then
+			ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a valid convar name. Do not include 'momo_admin_'.")
+			return
+		elseif !ConVarExists("momo_admin_"..var) then
+			ply:PrintMessage(HUD_PRINTCONSOLE,"Convar 'momo_admin_"..var.."' does not exist. Please supply a valid convar name. Do not include 'momo_admin_'.")
+			return
+		end
+
+		if !value then
+			ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a value to set the convar to.")
+			return
+		end
+
+		RunConsoleCommand("momo_admin_"..var,value)
+		print(">>momo admin setter ran")
 	end
 
-	local var = args[1]
-	local value = args[2]
-
-	if !var then
-		ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a valid convar name. Do not include 'momo_admin_'.")
-		return
-	elseif !ConVarExists("momo_admin_"..var) then
-		ply:PrintMessage(HUD_PRINTCONSOLE,"Convar 'momo_admin_"..var.."' does not exist. Please supply a valid convar name. Do not include 'momo_admin_'.")
-		return
-	end
-
-	if !value then
-		ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a value to set the convar to.")
-		return
-	end
-
-	RunConsoleCommand("momo_admin_"..var,value)
-	print(">>momo admin setter ran")
+	concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.",FCVAR_REPLICATED)
 end
-
-concommand.Add("momo_admin_set",admin_set,nil,"Helper command for setting Morph Mod admin convars. Available to super admins.")
 
 //Deprecated commands and convars.
 concommand.Add("pk_pill_adminonly",function(ply,cmd,args)
