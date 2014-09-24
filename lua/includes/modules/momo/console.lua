@@ -21,6 +21,11 @@ end
 //Admin var setter command.
 if SERVER then
 	local function admin_set(ply,cmd,args)
+		if !ply then
+			print("If you are using the server console, you should set the variables directly!")
+			return
+		end
+
 		if !ply:IsSuperAdmin() then
 			ply:PrintMessage(HUD_PRINTCONSOLE,"You must be a super admin to use this command.")
 			return
@@ -30,7 +35,7 @@ if SERVER then
 		local value = args[2]
 
 		if !var then
-			ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a valid convar name. Do not include 'momo_admin_'.")
+			if ply then ply:PrintMessage(HUD_PRINTCONSOLE,"Please supply a valid convar name. Do not include 'momo_admin_'.") end
 			return
 		elseif !ConVarExists("momo_admin_"..var) then
 			ply:PrintMessage(HUD_PRINTCONSOLE,"Convar 'momo_admin_"..var.."' does not exist. Please supply a valid convar name. Do not include 'momo_admin_'.")
