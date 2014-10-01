@@ -517,6 +517,14 @@ if CLIENT then
 			heading_admin:SetColor(Color(255,0,0))
 			heading_admin:SizeToContents()
 
+			local function AdminClick(self)
+				if !LocalPlayer():IsSuperAdmin() then 
+					surface.PlaySound("buttons/button10.wav")
+					return
+				end
+				self:Toggle()
+			end
+
 			local function AdminConVarChanged(self,val)
 				if ( !self.m_strConVar ) then return end
 				RunConsoleCommand("momo_admin_set",string.sub(self.m_strConVar,12),val)
@@ -529,6 +537,7 @@ if CLIENT then
 			checkbox_admin_restrict:SetConVar("momo_admin_restrict")
 			checkbox_admin_restrict:SizeToContents()
 			checkbox_admin_restrict.Button.ConVarChanged = AdminConVarChanged
+			checkbox_admin_restrict.Button.DoClick = AdminClick
 
 			local checkbox_admin_neverfreeze = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_admin_neverfreeze:SetPos(20, 140)
@@ -537,6 +546,7 @@ if CLIENT then
 			checkbox_admin_neverfreeze:SetConVar("momo_admin_neverfreeze")
 			checkbox_admin_neverfreeze:SizeToContents()
 			checkbox_admin_neverfreeze.Button.ConVarChanged = AdminConVarChanged
+			checkbox_admin_neverfreeze.Button.DoClick = AdminClick
 
 			local checkbox_admin_anyweapons = vgui.Create("DCheckBoxLabel",self.SpawnPanel)
 			checkbox_admin_anyweapons:SetPos(20, 160)
@@ -545,6 +555,7 @@ if CLIENT then
 			checkbox_admin_anyweapons:SetConVar("momo_admin_anyweapons")
 			checkbox_admin_anyweapons:SizeToContents()
 			checkbox_admin_anyweapons.Button.ConVarChanged = AdminConVarChanged
+			checkbox_admin_anyweapons.Button.DoClick = AdminClick
 
 		end
 
