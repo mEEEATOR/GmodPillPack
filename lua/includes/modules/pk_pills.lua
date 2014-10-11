@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 //Module starts here...
 module("pk_pills",package.seeall)
-version="1.2.1-BETA"
+version="1.2.1"
 
 //
 //Load files
@@ -478,11 +478,11 @@ if CLIENT then
 
 		local node_home = tree:AddNode("Home","icon16/application.png")
 		
-		makeHTMLnode(node_home,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-home.html")
+		makeHTMLnode(node_home,"http://cogg.rocks/momo/ingame-home.html")
 		
 		local node_help = node_home:AddNode("Help","icon16/help.png")
 		
-		makeHTMLnode(node_help,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-help.html")
+		makeHTMLnode(node_help,"http://cogg.rocks/momo/ingame-help.html")
 		node_help:DoPopulate()
 		help_panel = node_help.SpawnPanel
 		
@@ -566,7 +566,7 @@ if CLIENT then
 		
 		local node_bug = node_home:AddNode("Report a Bug","icon16/exclamation.png")
 		
-		makeHTMLnode(node_bug,"https://237b3d30e4f987cbc06c04bddc1a410295ad6c50.googledrive.com/host/0B1eya18XXYcjRjFKZFF2a2pCNUk/ingame-bugreport.html")
+		makeHTMLnode(node_bug,"http://cogg.rocks/momo/ingame-bugreport.html")
 		node_bug:DoPopulate()
 		node_bug.SpawnPanel:QueueJavascript("setup("..util.TableToJSON{addons=engine.GetAddons(),dedi=game.IsDedicated(),sp=game.SinglePlayer(),gm=GAMEMODE.Name,map=game.GetMap()}..")")
 
