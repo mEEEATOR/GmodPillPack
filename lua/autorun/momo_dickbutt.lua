@@ -4,7 +4,7 @@ AddCSLuaFile()
 momo.registerComponent{
 	name="spawnable",
 	info="Makes the form accessable through the spawnmenu.",
-	exflag="spawnable",
+	exgroup="spawnable",
 	schema={
 		name={
 			type="string",
@@ -25,11 +25,12 @@ momo.registerComponent{
 momo.registerComponent{
 	name="subtype",
 	info="Makes this form act as a subtype of another form.",
-	exflag="spawnable",
+	exgroup="spawnable",
 	schema={
 		of={
 			type="string",
-			info="The form we are a skin of."
+			info="The form we are a skin of. Defaults to the parent.",
+			optional=true
 		}
 	}
 }
@@ -37,7 +38,7 @@ momo.registerComponent{
 momo.registerComponent{
 	name="core-physical",
 	info="This is the physical morph core component.",
-	exflag="core",
+	exgroup="core",
 	schema={
 		collision_shape={
 			type="string",
@@ -88,16 +89,37 @@ momo.registerComponent{
 }
 
 momo.registerForm{
-	id="sample",
-	{
+	"sample",
+	spawnable={
 		"spawnable", 
 		name="I am a sample!",
 		category="momo"
 	},
-	{
+	core={
 		"core-physical",
 		collision_shape = "model",
 		material = "flesh",
 		mass = 20
 	}
 }
+
+/*
+local jsonrep = util.TableToJSON{
+	"sample",
+	spawnable={ //names are needed so we can merge stuff
+		"spawnable", 
+		name="I am a sample!",
+		category="momo"
+	},
+	core={
+		"core-physical",
+		collision_shape = "model",
+		material = "flesh",
+		mass = 20
+	},
+	teemo="deleted"
+}
+
+print(jsonrep)
+
+PrintTable(util.JSONToTable(jsonrep))*/

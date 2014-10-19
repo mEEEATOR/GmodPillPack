@@ -9,13 +9,14 @@ _VERSION=0
 include("momo/compat.lua")
 include("momo/tf2lib.lua")
 include("momo/console.lua")
+include("momo/editor.lua")
 
-local components={}
-function registerComponent(compTable)
-	if !compTable.name or type(compTable.name)!="string" then error("Attempted to register MoMo component with missing/invalid name!") end
-	if !compTable.info or type(compTable.info)!="string" then error("Attempted to register MoMo component with missing/invalid info!") end
-	if !compTable.schema or type(compTable.schema)!="table" then error("Attempted to register MoMo component with missing/invalid schema!") end
-	components[compTable.name]=compTable
+_components={}
+function registerComponent(compProto)
+	if !compProto.name or type(compProto.name)!="string" then error("Attempted to register MoMo component with missing/invalid name!") end
+	if !compProto.info or type(compProto.info)!="string" then error("Attempted to register MoMo component with missing/invalid info!") end
+	if !compProto.schema or type(compProto.schema)!="table" then error("Attempted to register MoMo component with missing/invalid schema!") end
+	_components[compProto.name]=compProto
 end
 
 /*Prevalidation:
@@ -25,21 +26,22 @@ end
 */
 
 local function validateForm(formTable)
+	local id
 	local extable = {}
 	for k,v in pairs(formTable) do
-		if type(k)=="number" then
+		if type(v)=="table" then
 			local compTable = v
 			local compName = compTable[1]
 			if !compName or type(compName)!="string" then return "Component #"..k.." has a missing/invalid type!" end
-			if !components[compName] then return 'Attempted to use nonexistent component type "'..compName..'"!' end
+			if !_components[compName] then return 'Attempted to use nonexistent component type "'..compName..'"!' end
 			
-			local defTable = components[compName]
+			local defTable = _components[compName]
 
-			if defTable.exflag then
-				if extable[defTable.exflag] then
-					return 'Components "'..compName..'" and "'..extable[defTable.exflag]..'" cannot be used together!'
+			if defTable.exgroup then
+				if extable[defTable.exgroup] then
+					return 'Components "'..compName..'" and "'..extable[defTable.exgroup]..'" cannot be used together!'
 				else
-					extable[defTable.exflag]=compName
+					extable[defTable.exgroup]=compName
 				end
 			end
 
@@ -72,6 +74,11 @@ local function validateForm(formTable)
 			end
 
 			//check agaist schema!
+		elseif type(v)=="string" then
+			if id then
+				return "Multiple IDs have been set."
+			end
+			id = v
 		end
 	end
 end
