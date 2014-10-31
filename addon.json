@@ -8,6 +8,8 @@
 		"*.gma",
 		"*.md",
 		"*.bat",
+		"*.exe",
+		"*.html",
 		"LICENSE"
 	]
 }

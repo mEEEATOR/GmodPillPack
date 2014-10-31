@@ -22,6 +22,12 @@ pk_pills.registerDrive("roll",{
 		local center = ent:LocalToWorld(phys:GetMassCenter())
 
 		moveDir:Normalize()
+
+		if options.rotcap then
+			local av=phys:GetAngleVelocity()
+			local abs = math.abs(av.x)+math.abs(av.y)+math.abs(av.z)
+			if abs>options.rotcap then return end
+		end
 		phys:ApplyForceOffset(moveDir * options.power,center + Vector(0,0,1))
 		phys:ApplyForceOffset(moveDir * -options.power,center + Vector(0,0,-1))
 	end,

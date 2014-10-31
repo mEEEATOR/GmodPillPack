@@ -10,14 +10,9 @@ momo.registerComponent{
 			type="string",
 			info="Name shown in spawnmenu."
 		},
-		category={
-			type="string",
-			info="The spawnmenu category to find this form in."
-		},
 		random_skin={
 			type="boolean",
-			info="If true, sub-types of this form will be selected at random.",
-			optional=true
+			info="If true, sub-types of this form will be selected at random."
 		}
 	}
 }

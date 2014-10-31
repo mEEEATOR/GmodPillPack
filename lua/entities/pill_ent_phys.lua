@@ -121,6 +121,7 @@ function ENT:Initialize()
 		self.loopingSounds={}
 		if self.formTable.sounds then
 			for k,v in pairs(self.formTable.sounds) do
+				if v==false then continue end
 				if string.sub(k,1,5)=="loop_" then self.loopingSounds[string.sub(k,6)]=CreateSound(self,v)
 				elseif string.sub(k,1,5)=="auto_"&&isstring(v) then
 					local func
@@ -298,18 +299,19 @@ else
 
 					local locang = aimEnt:WorldToLocalAngles(ang)
 
+					local xOffset = self.formTable.aim.xOffset or 0
 					if !self.formTable.aim.xInvert then
-						aimEnt:SetPoseParameter(self.formTable.aim.xPose,locang.y)
+						aimEnt:SetPoseParameter(self.formTable.aim.xPose,math.NormalizeAngle(locang.y+xOffset))
 					else
-						aimEnt:SetPoseParameter(self.formTable.aim.xPose,-locang.y)
+						aimEnt:SetPoseParameter(self.formTable.aim.xPose,math.NormalizeAngle(-locang.y+xOffset))
 					end
 					if !self.formTable.aim.yInvert then
 						aimEnt:SetPoseParameter(self.formTable.aim.yPose,locang.p)
 					else
 						aimEnt:SetPoseParameter(self.formTable.aim.yPose,-locang.p)
 					end
-				else
-					aimEnt:SetPoseParameter(self.formTable.aim.xPose,0)
+				elseif !self.formTable.useDefAim||self.formTable.useDefAim(ply,self) then
+					aimEnt:SetPoseParameter(self.formTable.aim.xPose,self.formTable.aim.xDef or 0)
 					aimEnt:SetPoseParameter(self.formTable.aim.yPose,0)
 				end
 			end

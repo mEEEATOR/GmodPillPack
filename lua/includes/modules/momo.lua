@@ -108,6 +108,145 @@ schema_types["int"]={
 }
 */
 
+function processCommand(cmd,ply)
+	/*
+		CREATE
+			NAMESPACE name [data]
+				-Namespace already exists!
+				-Can't create read-only namespace!
+				>If data, create forms in non-inheritance breaking order.
+			FORM namespace name parent [data]
+				-Namespace does not exist!
+				-Can't create form in read-only namespace!
+				-Form already exists!
+				-Parent does not exist!
+				>If data, create components.
+			COMPONENT namespace form name type [data]
+				>Namespace does not exist!
+				>Can't create non-configurable component in read-only namespace!
+				>Form does not exist!
+				>Component already exists!
+				>Validation failure! (LIST ERRORS)
+		DELETE
+			NAMESPACE name
+				>Namespace does not exist!
+				>Can't delete read-only namespace!
+			FORM namespace name
+				>Namespace does not exist!
+				>Can't delete form in read-only namespace!
+				>Form does not exist!
+			COMPONENT namespace form name
+				>Namespace does not exist!
+				>Can't delete non-configurable component in read-only namespace!
+				>Form does not exist!
+				>Component does not exist!
+			PROPERTY namespace form component name
+				>Namespace does not exist!
+				>Can't delete property in non-configurable component in read-only namespace!
+				>Form does not exist!
+				>Component does not exist!
+				>Property does not exist!
+				>Property is not optional and is not shadowing a parent property.
+		RENAME
+			NAMESPACE
+				>Source namespace does not exist!
+				>Destination namespace already exists!
+				>Can't rename read-only namespace!
+			FORM
+				>Source component does not exist!
+				>Destination component already exists!
+				>Can't rename component in read-only namespace!
+			COMPONENT
+		SET namespace form component property value
+
+		always return an accept/deny 
+	*/
+end
+
+_forms={}
+//Returns a TABLE of errors!
+/*
+function registerFragment(fragment,ply) // ply=actor
+	// namespace.form.component.property
+	local errors={}
+	local function add_error(lvl,name,desc)
+		table.Insert(errors,{lvl=lvl,name=name,desc=desc})
+	end
+
+	local function base_check(lvl,name,v)
+		if CLIENT then return end
+		local failed
+
+		if tonumber(name) then
+			add_error(lvl,name,"has a purely numeric name. This is not allowed!")
+			failed=true
+		end
+
+		if string.find(name,"_\\.") then
+			add_error(lvl,name,"has a name with illegal characters. Underscores and periods are not allowed!")
+			failed=true
+		end
+
+		if !istable(v) then
+			add_error(lvl,name,"is not a table!")
+			failed=true
+		end
+
+		return failed
+	end
+
+	if SERVER then
+		if false then /*can edit forms* /
+			return {lvl="generic",desc="Whatever the damn thing returned!"}
+		end
+
+		if !istable(fragment) then
+			return {lvl="generic",desc="The fragment is not even a table. What the hell?"}
+		end
+	end
+
+	for ns_name,ns in pairs(fragment) do
+		if base_check("namespace",ns_name,ns) then
+			fragment[ns_name]=nil
+			continue
+		end
+
+		local readonly = SERVER and string.byte(ns_name)==95
+
+		if ns._config then
+			if readonly then
+				ns._config=nil
+				add_error("namespace",ns_name,"is readonly. Its configuration cannot be changed!")
+			elseif CLIENT then
+				if ns._config.icon or ns._config.printName then
+					//Signal menu
+				end
+			end
+		end
+
+		for form_name,form in pairs(ns) do
+			if form_name=="_config" then
+				continue
+			elseif base_check("form",form_name,ns) then
+				fragment[ns_name]=nil
+				continue
+			end
+
+			local parent = form._parent
+			if parent then
+				//seek parent in _forms. If it doesn't exist, 
+			end
+		end
+
+
+
+
+
+	end
+end
+*/
+//
+
 function registerForm(formTable)
 	if CLIENT then return end
 	//Force abstract to false if not true

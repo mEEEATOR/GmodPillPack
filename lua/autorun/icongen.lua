@@ -23,6 +23,10 @@ AddCSLuaFile()
 	spooky mid row, 1/3 from the right
 	weapons 197 175 145
 	fun 4th from left
+
+	-PORTAL-
+	1 - White
+	2 - Dirty blue second row
 */
 
 
@@ -62,7 +66,7 @@ if CLIENT then
 		end
 
 		//Custom
-		//model:GetEntity():SetSkin(1)
+		model:GetEntity():SetSkin(3)
 		/*model:GetEntity():SetBodygroup(2,1)
 		model:GetEntity():SetBodygroup(3,1)
 		model:GetEntity():SetBodygroup(4,1)*/

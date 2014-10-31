@@ -43,14 +43,6 @@ function PANEL:Setup( vars )
 				DComboBox.Paint( combo, w, h )
 			end
 		end
-
-		/*self:GetRow().AddChoice = function( self, value, data, select )
-			combo:AddChoice( value, data, select )
-		end
-		
-		self:GetRow().SetSelected = function( self, id )
-			combo:ChooseOptionID( id )
-		end*/
 	elseif vars.type=="number" then
 		local ctrl = self:Add( "DNumSlider" )
 		ctrl:Dock(FILL)
@@ -92,32 +84,52 @@ function PANEL:Setup( vars )
 		end
 	elseif vars.type=="string" then
 		local text = self:Add( "DTextEntry" )
-		text:SetDrawBackground( false )
-		text:Dock( FILL )
+		text:SetDrawBackground(false)
+		text:Dock(FILL)
 
-		-- Return true if we're editing
-		self.IsEditing = function( self )
+		self.IsEditing = function(self)
 			return text:IsEditing()
 		end
 
-		-- Set the value
-		self.SetValue = function( self, val )
-			text:SetText( util.TypeToString( val ) ) 
+		self.SetValue = function(self,val)
+			text:SetText(util.TypeToString(val)) 
 		end
 
-		-- Alert row that value changed
-		text.OnValueChange = function( text, newval )
-		
-			self:ValueChanged( newval )
-
+		text.OnValueChange = function(text,newval)
+			self:ValueChanged(newval)
 		end
-	else
-		-- Return true if we're editing
+	elseif vars.type=="boolean" then
+		local checkbox = self:Add("DCheckBox")
+		checkbox:SetPos(0,2)
+
 		self.IsEditing = function( self )
 			return false
 		end
 
-		-- Set the value
+		self.SetValue = function(self,val)
+			checkbox:SetValue(val)
+		end
+
+		checkbox.OnChange = function(_,newval)
+			self:ValueChanged(newval)
+			if !newval then self.m_pRow:Hide() end
+
+			self.m_pRow:GetParent():InvalidateLayout(true)
+			self.m_pRow:GetParent():GetParent():InvalidateLayout()
+
+		end
+
+		/*self.m_pRow.PerformLayout = function(row)
+			row:SetTall(checkbox.m_bValue and 0 or 20)
+			row.Label:SetWide(row:GetWide() * 0.45)
+			print(checkbox.m_bValue)
+			print("LAYOUT!")
+		end*/
+	else
+		self.IsEditing = function( self )
+			return false
+		end
+
 		self.SetValue = function(self,val)
 			
 		end
@@ -208,19 +220,24 @@ concommand.Add("momo_editor",function()
 	//editor:SetHTML(editor_src)
 	//editor:MakePopup()
 	//editor:AddFunction("momo_editor","exit",function() editor:Remove() end)
+	local test_name = "sample"
 
 	local test_form = {
-		"sample",
 		spawnable={
-			"spawnable", 
+			_class="spawnable",
 			name="I am a sample!",
-			category="momo"
+			category="momo",
+			random_skin=true,
+			z=true
 		},
 		core={
-			"core-physical",
+			_class="core-physical",
 			collision_shape = "model",
 			material = "flesh",
 			mass = 20
+		},
+		zzzz={
+			_class="subtype"
 		}
 	}
 
@@ -228,7 +245,7 @@ concommand.Add("momo_editor",function()
 
 	local window = vgui.Create( "DFrame" )
 	window:SetSize( 600, 400 )
-	window:SetTitle('Editing Form "'..test_form[1]..'".')
+	window:SetTitle('Editing Form "'..test_name..'".')
 	window:Center()
 	window:SetSizable( true )
 	window:MakePopup()
@@ -238,8 +255,8 @@ concommand.Add("momo_editor",function()
 
 	for comp,tab in pairs(test_form) do
 		if !isnumber(comp) then
-			local catname = comp.." ["..tab[1].."]"
-			local def  = comp_defs[tab[1]]
+			local catname = comp.." ["..tab._class.."]"
+			local def  = comp_defs[tab._class]
 			control:GetCategory(catname,true).Header:SetToolTip(def.info) //TODO! Iterate over schema instead of the table we are given
 			for k,schema in pairs(def.schema) do
 				if !isnumber(k) then
