@@ -66,7 +66,10 @@ if CLIENT then
 		end
 
 		//Custom
-		model:GetEntity():SetSkin(3)
+		model:GetEntity():SetSkin(1)
+		//model:GetEntity():SetBodygroup(2,1)
+		//model:GetEntity():SetBodygroup(1,1)
+		
 		/*model:GetEntity():SetBodygroup(2,1)
 		model:GetEntity():SetBodygroup(3,1)
 		model:GetEntity():SetBodygroup(4,1)*/

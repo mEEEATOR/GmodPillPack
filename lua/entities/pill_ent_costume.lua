@@ -103,9 +103,9 @@ function ENT:Initialize()
 
 					func()
 				end
-				if self.loopingSounds.move then
-					self:PillLoopSound("move")
-				end
+			end
+			if self.loopingSounds.move then
+				self:PillLoopSound("move")
 			end
 			/*if self.loopingSounds.move&&!self.formTable.moveSoundControl then
 				self:PillLoopSound("move")
