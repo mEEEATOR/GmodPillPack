@@ -6,17 +6,21 @@ momo.registerComponent{
 	info="Makes the form accessable through the spawnmenu.",
 	exgroup="spawnable",
 	schema={
+		supertype={
+			type="string",
+			info="The form we are a sub-type of."
+		},
 		name={
 			type="string",
 			info="Name shown in spawnmenu."
 		},
-		random_skin={
+		random_subtype={
 			type="boolean",
 			info="If true, sub-types of this form will be selected at random."
 		}
 	}
 }
-
+/*
 momo.registerComponent{
 	name="subtype",
 	info="Makes this form act as a subtype of another form.",
@@ -29,7 +33,7 @@ momo.registerComponent{
 		}
 	}
 }
-
+*/
 momo.registerComponent{
 	name="core-physical",
 	info="This is the physical morph core component.",
