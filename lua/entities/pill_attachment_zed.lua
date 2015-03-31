@@ -8,6 +8,8 @@ function ENT:Initialize()
 	if SERVER then
 		self:AddEffects(bit.bor(EF_BONEMERGE,EF_BONEMERGE_FASTCULL)) --fastcull seems to fix laggy bullshit garbage
 	end
+
+	self:GetParent():SetSubMaterial(0,"models/effects/vol_light001")
 end
 
 function ENT:BoneItUp(boneCount)

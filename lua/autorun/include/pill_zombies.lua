@@ -283,24 +283,3 @@ pk_pills.register("zombie_torso_fast",{
 		run=200
 	}
 })
-
-pk_pills.register("zombie_frame",{
-	parent="zombie",
-	printName=false,
-	model="models/birdbrainswagtrain/zombie/classic_frame.mdl",
-	bodyGroups={false}
-})
-
-pk_pills.register("zombie_fast_frame",{
-	parent="zombie_fast",
-	printName=false,
-	model="models/birdbrainswagtrain/zombie/fast_frame.mdl",
-	bodyGroups={false}
-})
-
-pk_pills.register("zombie_poison_frame",{
-	parent="zombie_poison",
-	printName=false,
-	model="models/birdbrainswagtrain/zombie/poison_frame.mdl",
-	bodyGroups={false,false,false,false}
-})

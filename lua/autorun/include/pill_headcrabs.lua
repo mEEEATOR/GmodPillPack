@@ -18,7 +18,7 @@ local combineMdls = {
 pk_pills.register("headcrab",{
 	printName="Headcrab",
 	side="hl_zombie",
-	zombie="zombie_frame",
+	zombie="zombie",
 	type="ply",
 	model="models/headcrabclassic.mdl",
 	default_rp_cost=6000,
@@ -101,7 +101,7 @@ pk_pills.register("headcrab",{
 						end
 
 						local t = ent.formTable.zombie
-						if t=="zombie_frame" and pk_pills.hasPack("ep1") and table.HasValue(combineMdls,mdl) then t="ep1_zombine_frame" end
+						if t=="zombie" and pk_pills.hasPack("ep1") and table.HasValue(combineMdls,mdl) then t="ep1_zombine" end
 
 						local newPill = pk_pills.apply(ply,t)
 						
@@ -144,7 +144,7 @@ pk_pills.register("headcrab",{
 pk_pills.register("headcrab_fast",{
 	parent="headcrab",
 	printName="Fast Headcrab",
-	zombie="zombie_fast_frame",
+	zombie="zombie_fast",
 	type="ply",
 	model="models/headcrab.mdl",
 	default_rp_cost=8000,
@@ -163,7 +163,7 @@ pk_pills.register("headcrab_fast",{
 pk_pills.register("headcrab_poison",{
 	parent="headcrab",
 	printName="Poison Headcrab",
-	zombie="zombie_poison_frame",
+	zombie="zombie_poison",
 	type="ply",
 	model="models/headcrabblack.mdl",
 	default_rp_cost=7000,
