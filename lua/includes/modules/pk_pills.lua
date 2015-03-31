@@ -66,6 +66,11 @@ function packRequireGame(name,id)
 		end
 	end
 end
+
+function packEpisodicMigration()
+	currentPack.ep_migrate=true
+end
+
 /*
 if SERVER then var_downloads= CreateConVar("pk_pill_downloader","",{FCVAR_ARCHIVE}) end
 function packFinalize()
@@ -476,18 +481,10 @@ if CLIENT then
 
 		local tree = ctrl.ContentNavBar.Tree
 
-		local node_home = tree:AddNode("Home","icon16/application.png")
-		
+		local node_home = tree:AddNode("Home","icon16/flag_pink.png")
 		makeHTMLnode(node_home,"http://cogg.rocks/momo/ingame-home.html")
 		
-		local node_help = node_home:AddNode("Help","icon16/help.png")
-		
-		makeHTMLnode(node_help,"http://cogg.rocks/momo/ingame-help.html")
-		node_help:DoPopulate()
-		help_panel = node_help.SpawnPanel
-		
-		local node_settings = node_home:AddNode("Settings","icon16/cog.png")
-
+		local node_settings = tree:AddNode("Settings","icon16/cog.png")
 		node_settings.DoPopulate = function(self)
 			-- If we've already populated it - forget it.
 			if (self.SpawnPanel) then return end
@@ -563,19 +560,20 @@ if CLIENT then
 			self:DoPopulate()
 			ctrl:SwitchPanel(self.SpawnPanel)
 		end
-		
-		local node_bug = node_home:AddNode("Report a Bug","icon16/exclamation.png")
-		
-		makeHTMLnode(node_bug,"http://cogg.rocks/momo/ingame-bugreport.html")
-		node_bug:DoPopulate()
-		node_bug.SpawnPanel:QueueJavascript("setup("..util.TableToJSON{addons=engine.GetAddons(),dedi=game.IsDedicated(),sp=game.SinglePlayer(),gm=GAMEMODE.Name,map=game.GetMap()}..")")
 
 		local node_morphs = tree:AddNode("Categories","icon16/folder.png")
 
 		for _,pack in pairs(packs) do
 			local node = node_morphs:AddNode(pack.name, pack.icon)
 
+			if pack.ep_migrate then
+				makeHTMLnode(node,"http://cogg.rocks/momo/ingame-migrate.html")
+				continue
+			end
+
 			node.DoPopulate = function(self)
+				
+
 				-- If we've already populated it - forget it.
 				if (self.SpawnPanel) then return end
 

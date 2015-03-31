@@ -222,8 +222,6 @@ function ENT:Initialize()
 			//ply.ShouldDisableLegs=true
 			
 			self.camTraceFilter= {self}
-
-			pk_pills.help_panel:RunJavascript("setPill('"..self:GetPillForm().."')")
 		end
 	end
 end
@@ -270,8 +268,6 @@ function ENT:OnRemove()
 				end
 				
 				//ply.ShouldDisableLegs=nil
-
-				pk_pills.help_panel:RunJavascript("setPill(null)")
 			end
 		end
 	end

@@ -255,8 +255,6 @@ function ENT:Initialize()
 			//ply.ShouldDisableLegs=true
 			
 			self.camTraceFilter= {self,self:GetPillUser()}
-
-			pk_pills.help_panel:RunJavascript("setPill('"..self:GetPillForm().."')")
 		end
 		/*self.dbl=ClientsideModel("models/breen.mdl")
 		self.dbl:SetParent(self:GetPuppet())
@@ -335,8 +333,6 @@ function ENT:OnRemove()
 				end
 				
 				//ply.ShouldDisableLegs=nil
-
-				pk_pills.help_panel:RunJavascript("setPill(null)")
 			end
 		end
 	end

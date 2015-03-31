@@ -1,4 +1,5 @@
 require("pk_pills")
+require("momo")
 AddCSLuaFile()
 
 if SERVER then
