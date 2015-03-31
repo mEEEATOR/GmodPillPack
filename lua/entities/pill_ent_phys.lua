@@ -39,6 +39,7 @@ function ENT:Initialize()
 	if SERVER then
 		local model = self.formTable.model
 		local skin = self.formTable.skin
+		local visMat = self.formTable.visMat
 
 		if self.formTable.options then
 			local options = self.formTable.options()
@@ -51,6 +52,9 @@ function ENT:Initialize()
 				if pickedOption.skin then
 					skin=pickedOption.skin
 				end
+				if pickedOption.visMat then
+					visMat = pickedOption.visMat
+				end
 			else
 				local pickedOption = table.Random(options)
 				if not model then
@@ -58,6 +62,9 @@ function ENT:Initialize()
 				end
 				if not skin then
 					skin=pickedOption.skin
+				end
+				if not visMat then
+					visMat = pickedOption.visMat
 				end
 			end
 		end
@@ -157,8 +164,14 @@ function ENT:Initialize()
 			self:PillAnim(self.formTable.seqInit,true)
 		end
 
-		if self.formTable.visMat then
-			self:SetMaterial(self.formTable.visMat)
+		if visMat then
+			self:SetMaterial(visMat)
+		end
+
+		if self.formTable.subMats then
+			for k,v in pairs(self.formTable.subMats) do
+				self:SetSubMaterial(k,v)
+			end
 		end
 
 		if self.formTable.modelScale then
